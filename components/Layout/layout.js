@@ -93,7 +93,7 @@ return (
 
 
 
-          <Footer style={{ textAlign: 'center' }}>Created for <strong>Central Bank of India's ADC Department</strong> by <strong>Aditya Kumar</strong></Footer>
+          <Footer style={{ textAlign: 'center' }}>Created for <strong>Central Bank of India&apos;s ADC Department</strong> by <strong>Aditya Kumar</strong></Footer>
         </Layout>
       </Layout>
     );
