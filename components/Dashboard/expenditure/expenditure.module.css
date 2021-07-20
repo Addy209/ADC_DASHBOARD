@@ -1,0 +1,61 @@
+.exp_layout, .filters{
+    display: flex;
+    flex-direction: column;
+}
+
+.filters{
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.scroll{
+    overflow-x: scroll;
+}
+
+.graph{
+    display: flex;
+    flex-direction: column;
+}
+
+.upper_graph, .lower_graph{
+    display: flex;
+    flex-direction: row;
+    width:100%;
+}
+
+.chart{
+    width: 50%;
+}
+
+.upload{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.expenditureform{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.expenditureform_field{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+}
+
+.setwidth{
+    width: 75%;
+}
+
+@media screen and (max-width:750px) {
+    .upper_graph, .lower_graph{
+        flex-direction: column;
+    }
+    .chart{
+        width: 100%;
+    }
+}

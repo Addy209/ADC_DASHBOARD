@@ -1,0 +1,32 @@
+.logindiv{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.loginbox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ddd;
+    padding: 5% 5% 8% 5%;
+    box-sizing: border-box;
+    box-shadow: 0px 1px 28px 7px rgba(0,0,0,0.8);
+    -webkit-box-shadow: 0px 1px 28px 7px rgba(0,0,0,0.8);
+    -moz-box-shadow: 0px 1px 28px 7px rgba(0,0,0,0.8);
+}
+
+.title{
+    padding-bottom: 3vh;
+}
+
+.logintext{
+    padding:1vh;
+}
+
+.icon{
+    vertical-align: middle;
+}

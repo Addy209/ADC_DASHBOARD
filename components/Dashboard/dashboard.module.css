@@ -1,0 +1,71 @@
+.logo, .title{
+    color: #fff;
+    vertical-align: middle;
+}
+
+.user{
+    margin: 12px 10px 0 0;
+    float: right;
+}
+
+.usertext{
+    color: white;
+    float: right;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: large;
+    
+}
+
+.title{
+    margin-top: 1.7vh;
+}
+
+.count{
+    width:20rem;
+    height: 13rem;
+    border-radius: 5px;
+    padding:0 5px 0 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.counter, .values, .charts{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 2vh;
+    flex-wrap: wrap;
+}
+
+.charts{
+    width: 100%;
+    height: 65vh;
+}
+
+.weeklytd, .sixmonthexpense{
+    width: 50%;
+    padding: 10px;
+}
+.values{
+    margin-top: 0;
+    flex-direction: column;
+}
+.icon{
+   display: flex;
+   align-items: center;
+    vertical-align: middle;
+}
+
+.values_text{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 5px;
+    
+}
+
+.colorwhite{
+    color: white;
+}
