@@ -3,6 +3,17 @@ import { Divider, Upload, Switch, message } from 'antd';
 import { FileAddOutlined } from '@ant-design/icons';
 import styles from '../expenditure/expenditure.module.css'
 import ExpenditureForm from './uploadexpenditure';
+import {BACKEND_URL} from '../../../utils/constants'
+import {GraphQLClient,gql} from 'graphql-request'
+import Cookies from 'js-cookie';
+
+const upload_query=gql`
+mutation addfile($file:Upload!){
+  upload(file:$file){
+      success
+  }
+}
+`
 
 const { Dragger } = Upload;
 
@@ -36,30 +47,38 @@ const handleSwitchChange=(value, id)=>{
     console.log(switchval)
 }
 
-const prop = {
-  name: 'file',
-  multiple: true,
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  onChange(info) {
+ const onChange=(info)=> {
     const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
+    console.log(info)
+    if (status === 'uploading') {
+      const client=new GraphQLClient(BACKEND_URL, {
+        headers:{
+          authorization:`JWT ${Cookies.get('JWT')}`
+        }
+      })
+      client.request(upload_query,{
+        file:info.file
+      }).then(data=>{
+        console.log(data)
+      })
+
     }
     if (status === 'done') {
       message.success(`${info.file.name} file uploaded successfully.`);
     } else if (status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log('Dropped files', e.dataTransfer.files);
-  },
+  }
 };
+
+const onDrop=(e)=> {
+  console.log('Dropped files', e.dataTransfer.files);
+}
+
     return(
         <div>
             <Divider orientation="left">Daily Transaction Sheet Upload &nbsp; <Switch defaultChecked={switchval.daily} checkedChildren="On" unCheckedChildren="Off" onChange={(value)=>handleSwitchChange(value, "d")} /></Divider>
             {switchval.daily?<div className={styles.upload}>
-            <Dragger {...prop} className={styles.dragger}>
+            <Dragger onChange={onChange} onDrop={onDrop} className={styles.dragger}>
     <p className="ant-upload-drag-icon">
     <FileAddOutlined />
     </p>
@@ -72,7 +91,7 @@ const prop = {
     </div>:null}
     
     <Divider orientation="left">Expenditure Upload &nbsp; <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(value)=>handleSwitchChange(value, "e")} /></Divider>
-        {switchval.expense?<ExpenditureForm />:null}
+        {switchval.expense?<ExpenditureForm module={props.module} />:null}
         </div>
     )
 }

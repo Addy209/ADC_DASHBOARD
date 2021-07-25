@@ -1,17 +1,45 @@
 import React from 'react'
 import styles from './login.module.css'
 import { Form, Input, Button, Checkbox } from 'antd';
-import RiLoginCircleFill from 'react-icons/ri'
 import Image from 'next/image'
 import { Typography } from 'antd';
 import {RiLoginBoxFill} from 'react-icons/ri'
+import { request, gql } from 'graphql-request'
+import {BACKEND_URL, URLS} from '../../utils/constants'
+import * as actionTypes from '../../redux/actions/main'
+import {connect} from 'react-redux'
+import Cookies from 'js-cookie';
+import {useRouter} from 'next/router'
+
+const login_mut=gql`
+mutation TokenAuth($username:String!, $password:String!){
+  tokenAuth(username:$username, password: $password) {
+    token
+    payload
+    refreshExpiresIn
+  }
+}
+`
+
 
 const { Title } = Typography;
 
 const Login=(props)=>{
 
+  const router = useRouter()
+  if(props.loggedIn){
+    router.push(URLS.dashboard)
+  }
+
     const onFinish = (values) => {
-        console.log('Success:', values);
+      request(BACKEND_URL,login_mut, values).then(data=>{
+          console.log(data)
+          Cookies.set('JWT',data.tokenAuth.token)
+          props.login(true)
+        }).catch(err=>{
+          alert("Wrong Username or Password")
+        })
+
       };
     
       const onFinishFailed = (errorInfo) => {
@@ -31,7 +59,8 @@ const Login=(props)=>{
           name="basic"
           
           initialValues={{
-            remember: true,
+            username:"",
+            password:""
           }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
@@ -76,6 +105,14 @@ const Login=(props)=>{
         </div>
       );
 
+
 }
 
-export default Login
+const mapStateToProps=state=>({
+  loggedIn:state.main.loggedIn
+})
+
+const mapDispatchToProps=dispatch=>({
+  login:(status)=>dispatch(actionTypes.setToken(status))
+})
+export default connect(mapStateToProps,mapDispatchToProps)(Login)

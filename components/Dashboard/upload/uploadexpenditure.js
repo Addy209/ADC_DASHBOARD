@@ -16,7 +16,7 @@ import {TiUploadOutline} from 'react-icons/ti'
 
 
 
-const ExpenditureForm = () => {
+const ExpenditureForm = (props) => {
   const [state, setState] = useState({
       fintxns:"",
       nonfintxns:"",
@@ -25,7 +25,7 @@ const ExpenditureForm = () => {
       fincost:0,
       nonfincost:0,
       baseamount:"",
-      gst_percent:"",
+      gst_percent:0,
       gst:"",
       penalty:0,
       finalamt:0
@@ -144,6 +144,16 @@ const ExpenditureForm = () => {
       }
   }
 
+  const formSubmit=(values)=>{
+    const data={
+      ...state,
+      ...values,
+      month:values.month.toDate().getMonth()+1,
+      year:values.month.toDate().getFullYear()
+    }
+
+    console.log(data);
+  }
 
   return (
     <>
@@ -157,16 +167,18 @@ const ExpenditureForm = () => {
         }}
         initialValues={{
             month:"",
-            module:"",
+            module:"00",
             fintxns:"",
             nonfintxns:"",
             finrate:state.finrate,
             nonfinrate:state.nonfinrate,
             gst_percent:state.gst_percent,
-            penalty:0
+            penalty:0,
+            description:""
 
         }}
         onValuesChange={(values)=>handleChange(values)}
+        onFinish={formSubmit}
         size="large"
       >
           <div className={styles.expenditureform}>
@@ -204,9 +216,10 @@ const ExpenditureForm = () => {
         <div className={styles.expenditureform_field}>
         <Form.Item label="Module" name="module">
           <Select className={styles.setwidth}>
-            <Select.Option value="MB">Mobile Banking</Select.Option>
-            <Select.Option value="UPI">UPI</Select.Option>
-            <Select.Option value="misc">Misc.</Select.Option>
+          <Select.Option value="00">---Select Module---</Select.Option>
+            {props.module.map((val, index)=>(
+              <Select.Option value={val.code} key={index}>{val.module}</Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item label="Non-Financial Txns" name="nonfintxns">
@@ -231,13 +244,16 @@ const ExpenditureForm = () => {
           <InputNumber className={styles.setwidth} min={0} />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 6 }}>
+        <Form.Item label="Expense Description" name="description">
+          <Input className={styles.setwidth} min={0} />
+        </Form.Item>
+      </div>
+        </div>
+        <Form.Item wrapperCol={{ offset: 8, span:8 }}>
         <Button type="primary" htmlType="submit" className={styles.setwidth}>
           Upload&nbsp;<TiUploadOutline size="1.5rem" style={{verticalAlign:"middle"}} />
         </Button>
       </Form.Item>
-      </div>
-        </div>
       </Form>
     </>
   );

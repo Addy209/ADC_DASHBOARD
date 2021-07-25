@@ -4,30 +4,29 @@ import React from 'react'
 
 
 const TDChart=props=>{
-    const DATA_COUNT = 7;
-    const NUMBER_CFG = {count: DATA_COUNT, min: -100, max: 100};
 
-    const labels = [1,2,3,4,5,6,7];
+    const labels = props?.data.map((val)=>val.date);
+    
     const data = {
     labels: labels,
     datasets: [
         {
         label: 'Mobile Banking',
-        data: [11,22,33,44,77,55,66],
-        borderColor: "red",
-        backgroundColor: "red",
+        data: props.data.map((val)=>val.mbTdPercent),
+        borderColor: "rgba(219,58,52,0.6)",
+        backgroundColor: "gold",
         },
         {
             label: 'UPI',
-            data: [66,33,77,33,44,55,22],
-            borderColor: "blue",
-            backgroundColor: "blue",
+            data: props.data.map((val)=>val.upiTdPercent),
+            borderColor: "rgba(154,120,247,0.6)",
+            backgroundColor: "black",
         },
         {
             label: 'IMPS',
-            data: [44,88,99,33,55,77,11],
-            borderColor: "green",
-            backgroundColor: "green",
+            data: props.data.map((val)=>val.impsTdPercent),
+            borderColor: "rgba(69,115,82,0.6)",
+            backgroundColor: "tomato",
         }
     ]
     };

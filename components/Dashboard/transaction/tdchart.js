@@ -4,18 +4,16 @@ import React from 'react'
 
 
 const Chart=props=>{
-    const DATA_COUNT = 7;
-    const NUMBER_CFG = {count: DATA_COUNT, min: -100, max: 100};
 
-    const labels = [1,2,3,4,5,6,7,8];
+    const labels = props.label
     const data = {
     labels: labels,
     datasets: [
         {
-        label: 'Financial Transactions',
-        data: [11,22,33,44,77,55,0,66],
-        borderColor: "aquablue",
-        backgroundColor: "crimson",
+        label: props.name,
+        data: props.data,
+        borderColor: props.border,
+        backgroundColor: props.point,
         }
     ]
     };

@@ -1,15 +1,14 @@
 import '../styles/globals.css'
 import 'antd/dist/antd.css'; 
 import React from 'react'
+import { wrapper } from "../redux/store"
+import Root from './_root';
 
-function MyApp({ Component, pageProps }) {
-  const Layout = Component.Layout || React.Fragment;
-  console.log(Component)
-  return (
-  <Layout>
-  <Component {...pageProps} />
-  </Layout>
-  )
+function MyApp({Component, pageProps}) {
+
+  return <Root pageProps={pageProps} Component={Component} />
+  
 }
 
-export default MyApp
+
+export default wrapper.withRedux(MyApp)

@@ -17,15 +17,15 @@ const Count=props=>{
             <Divider orientation="left" style={{color:"white"}}>{props.title}</Divider>
             < div className={styles.values_text}>
                 <Title level={5} style={{color:"#ddd"}}>Total Txns :</Title>&nbsp;
-                <Text keyboard className={styles.colorwhite}>5715369</Text>
+                <Text keyboard className={styles.colorwhite}>{props.total}</Text>
             </div>
             < div className={styles.values_text}>
                 <Title level={5} style={{color:"#ddd"}}>TD (TD%) :</Title>&nbsp;
-                <Text keyboard className={styles.colorwhite}>52147 (0.74%)</Text>
+                <Text keyboard className={styles.colorwhite}>{props.td} ({props.td_per}%)</Text>
             </div>
             < div className={styles.values_text}>
                 <Title level={5} style={{color:"#ddd"}}>Business Decline :</Title>&nbsp;
-                <Text keyboard className={styles.colorwhite}>5715369</Text>
+                <Text keyboard className={styles.colorwhite}>{props.bd}</Text>
             </div>
             </div>
 

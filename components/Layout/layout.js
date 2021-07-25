@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Divider, Dropdown } from 'antd';
+import { Layout, Menu, Button, Dropdown } from 'antd';
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -15,29 +15,19 @@ import Link from 'next/link'
 import {FaUserCircle} from 'react-icons/fa'
 import {MdLaptopMac} from 'react-icons/md'
 import {URLS} from '../../utils/constants'
+import { connect } from 'react-redux';
+import * as actionTypes from '../../redux/actions/main'
+import { useRouter } from 'next/router';
 
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <Link rel="noopener noreferrer" href="https://www.antgroup.com">
-        My Profile
-      </Link>
-    </Menu.Item>
-    <Menu.Item>
-      <Link rel="noopener noreferrer" href="https://www.aliyun.com">
-        My Tasks
-      </Link>
-    </Menu.Item>
-  </Menu>
-);
-
 const SiderDemo =(props)=> {
+  console.log(props)
   
-const [collapsed,setCollapse]=React.useState(false)
+const [collapsed,setCollapse]=React.useState(true)
+const router=useRouter()
 
   const onCollapse = () => {
       console.log(collapsed)
@@ -45,6 +35,32 @@ const [collapsed,setCollapse]=React.useState(false)
         return !val
     } );
   };
+
+  const logout=()=>{
+    props.logout()
+    router.push(URLS.home)
+  }
+
+
+  const menu = (
+    <Menu>
+      <Menu.Item>
+        <Link rel="noopener noreferrer" href="https://www.antgroup.com">
+          My Profile
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Link rel="noopener noreferrer" href="https://www.aliyun.com">
+          My Tasks
+        </Link>
+      </Menu.Item>
+      <Menu.Item>
+        <Button onClick={logout}>
+          Logout
+        </Button>
+      </Menu.Item>
+    </Menu>
+  );
 
 return (
       <Layout style={{ minHeight: '100vh' }}>
@@ -74,7 +90,7 @@ return (
 
           <Header className="site-layout-background" style={{ padding: 5 }} >
           <Dropdown overlay={menu} placement="bottomRight" arrow>
-            <span className={styles.usertext}><span className={styles.usertext_hello}>Hello User</span> &nbsp;
+            <span className={styles.usertext}><span className={styles.usertext_hello}>{`Hello ${props.name} (${props.username})`}</span> &nbsp;
             <FaUserCircle fill="#fff" size="35px" className={styles.user}/>
             </span>
           </Dropdown>
@@ -99,5 +115,13 @@ return (
     );
   }
 
+const mapStateToProps=state=>({
+  name:state.main.name,
+  username:state.main.username
+})
 
-export default SiderDemo
+const mapDispatchToProps=dispatch=>({
+  logout:()=>dispatch(actionTypes.Logout())
+})
+
+export default connect(mapStateToProps,mapDispatchToProps)(SiderDemo)
