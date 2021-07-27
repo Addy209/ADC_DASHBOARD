@@ -17,7 +17,8 @@ import {MdLaptopMac} from 'react-icons/md'
 import {URLS} from '../../utils/constants'
 import { connect } from 'react-redux';
 import * as actionTypes from '../../redux/actions/main'
-import { useRouter } from 'next/router';
+import { useRouter,withRouter } from 'next/router';
+import {IoNotificationsSharp} from 'react-icons/io5'
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -25,9 +26,14 @@ const { SubMenu } = Menu;
 
 const SiderDemo =(props)=> {
   console.log(props)
+  const router=useRouter()
+  React.useEffect(()=>{
+    if(!props.loggedIn){
+      router.push(URLS.home)
+    }
+  },[])
   
 const [collapsed,setCollapse]=React.useState(true)
-const router=useRouter()
 
   const onCollapse = () => {
       console.log(collapsed)
@@ -44,6 +50,9 @@ const router=useRouter()
 
   const menu = (
     <Menu>
+      <Menu.Item>
+      <span className={styles.usertext}><span className={styles.usertext_hello}>{`Hello ${props.name} (${props.username})`}</span></span>
+      </Menu.Item>
       <Menu.Item>
         <Link rel="noopener noreferrer" href="https://www.antgroup.com">
           My Profile
@@ -90,10 +99,9 @@ return (
 
           <Header className="site-layout-background" style={{ padding: 5 }} >
           <Dropdown overlay={menu} placement="bottomRight" arrow>
-            <span className={styles.usertext}><span className={styles.usertext_hello}>{`Hello ${props.name} (${props.username})`}</span> &nbsp;
             <FaUserCircle fill="#fff" size="35px" className={styles.user}/>
-            </span>
           </Dropdown>
+          <IoNotificationsSharp fill="#fff" size="35px" className={styles.user} />
             
 
           </Header>
@@ -117,7 +125,8 @@ return (
 
 const mapStateToProps=state=>({
   name:state.main.name,
-  username:state.main.username
+  username:state.main.username,
+  loggedIn:state.main.loggedIn
 })
 
 const mapDispatchToProps=dispatch=>({

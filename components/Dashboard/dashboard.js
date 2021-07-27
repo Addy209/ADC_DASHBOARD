@@ -7,7 +7,6 @@ import ExpenseBarChart from './expensechart';
 import request, { GraphQLClient,gql } from 'graphql-request';
 import { BACKEND_URL, MONTH_NAMES } from '../../utils/constants';
 import Cookies from 'js-cookie';
-import { ValuesOfCorrectTypeRule } from 'graphql';
 
 const today_query=gql`
 query today{
@@ -50,7 +49,8 @@ const Dashboard =(props)=> {
 const [collapsed,setCollapse]=React.useState(false)
 
 React.useEffect(()=>{
-const client=new GraphQLClient(BACKEND_URL,{
+  if(props.loggedIn)
+{const client=new GraphQLClient(BACKEND_URL,{
   headers:{
     authorization: `JWT ${Cookies.get('JWT')}`
   }
@@ -107,7 +107,7 @@ client.request(today_query).then(data=>{
 
   
   
-})
+})}
 
 
 
@@ -124,7 +124,7 @@ client.request(today_query).then(data=>{
 
   if(resp){
     const d=new Date(resp?.todaydata?.date)
-    date=`${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`
+    date=`${d.getDate()}-${MONTH_NAMES[d.getMonth()+1]}-${d.getFullYear()}`
   }
 
 

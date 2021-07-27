@@ -2,18 +2,95 @@ import React from 'react'
 import { Select, Divider, DatePicker, Space, Button, Typography } from 'antd';
 import styles from './expenditure.module.css'
 import Table from './datatable';
+import request, { GraphQLClient,gql } from 'graphql-request';
+import { BACKEND_URL, MONTH_NAMES } from '../../../utils/constants';
+import Cookies from 'js-cookie';
+import ExcelExport from './downloadcsv'
+
 
 const { Option } = Select;
 const {Title, Text} =Typography
 
+const expense_query=gql`
+query($module:Int!,$fromdate:Date,$todate:Date){
+  expensedata(module:$module,fromDate:$fromdate, toDate:$todate){
+    date
+    description
+    module{
+      code
+      module
+    }
+    finTxn
+    finRate
+    finCost
+    nonfinTxn
+    nonfinRate
+    nonfinCost
+    baseAmt
+    gstPercent
+    gstAmt
+    penalty
+    finalPayment
+  }
+}
+
+`
+
 const Expenditure=props=>{
+
+  const [respdata, setRespData]= React.useState(null)
+  const [values, setValues]=React.useState({
+    fromdate:null,
+    todate:null,
+    module:null
+  })
+
 
     const handleChange=(value) =>{
         console.log(`selected ${value}`);
+        setValues({
+          ...values,
+          module:value
+
+        })
       }
 
-      function dateChange(date, dateString,id) {
-        console.log(date, dateString, id);
+      const dateChange=(date, dateString,id)=> {
+        let val=dateString
+        if(id==="F"){
+          if (dateString===""){
+            val=null
+          }
+          setValues({
+            ...values,
+            fromdate:val
+          })
+        }
+        else{
+          if (dateString===""){
+            val=null
+          }
+          setValues({
+            ...values,
+            todate:val
+          })
+        }
+
+        console.log(values)
+      }
+
+      const handleClick=()=>{
+        if(values.module){
+          const client=new GraphQLClient(BACKEND_URL,{
+            headers:{
+              authorization: `JWT ${Cookies.get('JWT')}`
+            }
+          })
+          client.request(expense_query,values).then(data=>{
+            console.log(data)
+            setRespData(data)
+          })
+        }
       }
 
 return(
@@ -25,27 +102,28 @@ return(
     <Text>Module: &nbsp;</Text>
     <Select defaultValue="00" style={{ width: 180 }} onChange={(value)=>handleChange(value)}>
         <Option value="00" disabled>---Select Module---</Option>  
-      <Option value="MB">Mobile Banking</Option>
-      <Option value="UPI">UPI</Option>
-      <Option value="Misc">Misc.</Option>
+        {props.module?props.module.map((val, index)=>(
+              <Option value={val.code} key={index}>{val.module}</Option>
+            )):null}
     </Select>
     </span>
 
     <span>
     <Text>Month: &nbsp;</Text>
     <Space direction="horizontal">
-    <DatePicker onChange={(date, dateString)=>dateChange(date, dateString,'F')} picker="month" placeholder="From Month: "/>
-    <DatePicker onChange={(date, dateString)=>dateChange(date, dateString,'T')} picker="month" placeholder="To Month: "/>
+    <DatePicker onChange={(date, dateString)=>dateChange(date, dateString,'F')} picker="date" placeholder="From Month: "/>
+    <DatePicker onChange={(date, dateString)=>dateChange(date, dateString,'T')} picker="date" placeholder="To Month: "/>
     </Space>
     </span>
-    <Button type="primary">Go</Button>
+    <Button type="primary" onClick={handleClick}>Go</Button>
     </div>
-    <div>
+    {respdata?<div>
     <Divider orientation="left">Data</Divider>
     <div className={styles.scroll}>
-    <Table />
+    <Table module={values.module} data={respdata.expensedata}/>
     </div>
-    </div>
+    <ExcelExport data={respdata.expensedata} />
+    </div>:null}
 
 
     </div>

@@ -18,7 +18,7 @@ query{
 const Home=(props)=> {
   console.log(props)
   return (
-     <UploadData {...props} />
+     <UploadData {...props} loggedIn={props.loggedIn}/>
   )
 }
 

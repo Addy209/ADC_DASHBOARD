@@ -10,11 +10,24 @@ import {
   InputNumber,
   TreeSelect,
   Switch,
+  message
 } from 'antd';
 import styles from '../expenditure/expenditure.module.css'
 import {TiUploadOutline} from 'react-icons/ti'
+import {GraphQLClient, gql } from 'graphql-request';
+import { BACKEND_URL } from '../../../utils/constants';
+import Cookies from 'js-cookie';
 
-
+const expensecreate=gql`
+mutation($baseamount:Int!, $date:Date!, $description:String!, $finalamt:Int!, $fincost:Int!, $finrate:Float!, $fintxns:Int!
+  $gst:Int!, $gst_percent:Float!, $module:Int!, $nonfincost:Int!, $nonfinrate:Float!, $nonfintxns:Int!, $penalty:Int!){
+  createExpense(date:$date, description:$description, finTxn:$fintxns, finRate:$finrate, finCost:$fincost nonfinTxn:$nonfintxns, nonfinRate:$nonfinrate,
+  							nonfinCost:$nonfincost,gstPercent:$gst_percent,gstAmt:$gst,penalty:$penalty,baseAmt:$baseamount,finalPayment:$finalamt, module:$module)
+  {
+    success
+  }
+}
+`
 
 const ExpenditureForm = (props) => {
   const [state, setState] = useState({
@@ -148,11 +161,25 @@ const ExpenditureForm = (props) => {
     const data={
       ...state,
       ...values,
-      month:values.month.toDate().getMonth()+1,
-      year:values.month.toDate().getFullYear()
+      date:values.date.toDate().toISOString().split('T')[0],
     }
 
     console.log(data);
+    const client=new GraphQLClient(BACKEND_URL,{
+      headers:{
+        authorization:`JWT ${Cookies.get('JWT')}`
+      }
+    })
+
+    client.request(expensecreate,data).then(data=>{
+      console.log(data)
+      if(data.createExpense.success){
+        message.success("Expense Saved Successfully")
+      }
+    }).catch(err=>{
+      message.error("Expense was not saved")
+    })
+
   }
 
   return (
@@ -166,10 +193,10 @@ const ExpenditureForm = (props) => {
           span: 14,
         }}
         initialValues={{
-            month:"",
+            date:"",
             module:"00",
-            fintxns:"",
-            nonfintxns:"",
+            fintxns:0,
+            nonfintxns:0,
             finrate:state.finrate,
             nonfinrate:state.nonfinrate,
             gst_percent:state.gst_percent,
@@ -183,8 +210,8 @@ const ExpenditureForm = (props) => {
       >
           <div className={styles.expenditureform}>
           <div className={styles.expenditureform_field}>
-        <Form.Item label="Month" name="month">
-          <DatePicker picker="month" placeholder="Select Month and Year"  className={styles.setwidth}/>
+        <Form.Item label="Date" name="date">
+          <DatePicker picker="date" placeholder="Select Date of Expenditure"  className={styles.setwidth}/>
         </Form.Item>
         
         <Form.Item label="Financial Txns" name="fintxns">

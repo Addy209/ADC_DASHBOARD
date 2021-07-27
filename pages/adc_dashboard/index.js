@@ -14,7 +14,7 @@ const Home=(props)=> {
   // }
   console.log(props)
   return (
-     <Dashboard />
+     <Dashboard loggedIn={props.loggedIn} />
   )
 }
 

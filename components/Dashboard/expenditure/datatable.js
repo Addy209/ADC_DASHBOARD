@@ -2,64 +2,41 @@ import React from 'react'
 import { Table, Input, Button, Space } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
+import { OmitProps } from 'antd/lib/transfer/ListBody';
+import {  MONTH_NAMES } from '../../../utils/constants';
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 323312124,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-];
-
-class DataTable extends React.Component {
-  state = {
+const DataTable=props=> {
+  const [state,setState] = React.useState({
     searchText: '',
     searchedColumn: '',
-  };
+  });
 
-  getColumnSearchProps = dataIndex => ({
+  let searchInput=null
+
+  const getColumnSearchProps = dataIndex => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
       <div style={{ padding: 8 }}>
         <Input
           ref={node => {
-            this.searchInput = node;
+            searchInput = node;
           }}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
           onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-          onPressEnter={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{ marginBottom: 8, display: 'block' }}
         />
         <Space>
           <Button
             type="primary"
-            onClick={() => this.handleSearch(selectedKeys, confirm, dataIndex)}
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
             icon={<SearchOutlined />}
             size="small"
             style={{ width: 90 }}
           >
             Search
           </Button>
-          <Button onClick={() => this.handleReset(clearFilters)} size="small" style={{ width: 90 }}>
+          <Button onClick={() => handleReset(clearFilters)} size="small" style={{ width: 90 }}>
             Reset
           </Button>
           <Button
@@ -67,7 +44,7 @@ class DataTable extends React.Component {
             size="small"
             onClick={() => {
               confirm({ closeDropdown: false });
-              this.setState({
+              setState({
                 searchText: selectedKeys[0],
                 searchedColumn: dataIndex,
               });
@@ -85,14 +62,14 @@ class DataTable extends React.Component {
         : '',
     onFilterDropdownVisibleChange: visible => {
       if (visible) {
-        setTimeout(() => this.searchInput.select(), 100);
+        setTimeout(() => searchInput.select(), 100);
       }
     },
     render: text =>
-      this.state.searchedColumn === dataIndex ? (
+      state.searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[this.state.searchText]}
+          searchWords={[state.searchText]}
           autoEscape
           textToHighlight={text ? text.toString() : ''}
         />
@@ -101,95 +78,99 @@ class DataTable extends React.Component {
       ),
   });
 
-  handleSearch = (selectedKeys, confirm, dataIndex) => {
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
-    this.setState({
+    setState({
       searchText: selectedKeys[0],
       searchedColumn: dataIndex,
     });
   };
 
-  handleReset = clearFilters => {
+  const handleReset = clearFilters => {
     clearFilters();
-    this.setState({ searchText: '' });
+    setState({ searchText: '' });
   };
 
-  render() {
+    const data=props.data.map((val,index)=>({
+      key:index,
+      date:`${new Date(val.date).getDate()}-${MONTH_NAMES[new Date(val.date).getMonth()+1]}-${new Date(val.date).getFullYear()}`,
+      description:val.description,
+      fintxns:val.finTxn,
+      nonfintxns:val.nonfinTxn,
+      baseamt:val.baseAmt,
+      gst:val.gstPercent,
+      gstamt:val.gstAmt,
+      penalty:val.penalty,
+      finalpayment:val.finalPayment
+
+
+    }))
+
     const columns = [
       {
-        title: 'Month',
-        dataIndex: 'name',
-        key: 'name',
+        title: 'Date',
+        dataIndex: 'date',
+        key: 'date',
         width: '10%',
-        ...this.getColumnSearchProps('name'),
-      },
-      {
-        title: 'Year',
-        dataIndex: 'age',
-        key: 'age',
-        width: '10%',
-        ...this.getColumnSearchProps('age'),
-        sorter: (a, b) => a.age - b.age,
-        sortDirections: ['descend', 'ascend'],
+        ...getColumnSearchProps('date'),
       },
       {
         title: 'Description',
-        dataIndex: 'address',
-        key: 'address',
-        width:'25%',
-        ...this.getColumnSearchProps('address')
+        dataIndex: 'description',
+        key: 'description',
+        width:'30%',
+        ...getColumnSearchProps('description')
       },
       {
         title: 'Financial Txns',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'fintxns',
+        key: 'fintxns',
         width: '15%',
-        sorter: (a, b) => a.age - b.age,
+        sorter: (a, b) => a.fintxns - b.fintxns,
         sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'Non Financial Txn',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'nonfintxns',
+        key: 'nonfintxns',
         width: '15%',
-        sorter: (a, b) => a.address.length - b.address.length,
+        sorter: (a, b) => a.nonfintxns - b.nonfintxns,
         sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'Base Amount',
-        dataIndex: 'age',
-        key: 'age',
-        width: '15%',
-        sorter: (a, b) => a.address.length - b.address.length,
+        dataIndex: 'baseamt',
+        key: 'baseamt',
+        width: '10%',
+        sorter: (a, b) => a.baseamt- b.baseamt,
         sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'GST',
-        dataIndex: 'age',
-        key: 'age',
-        width: '15%',
-        sorter: (a, b) => a.address.length - b.address.length,
+        dataIndex: 'gstamt',
+        key: 'gstamt',
+        width: '10%',
+        sorter: (a, b) => a.gstamt - b.gstamt,
         sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'Penalty',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'penalty',
+        key: 'penalty',
         width: '15%',
-        sorter: (a, b) => a.address.length - b.address.length,
+        sorter: (a, b) => a.penalty- b.penalty,
         sortDirections: ['descend', 'ascend'],
       },
       {
         title: 'Final Payment',
-        dataIndex: 'age',
-        key: 'age',
+        dataIndex: 'finalpayment',
+        key: 'finalpayment',
         width: '25%',
-        sorter: (a, b) => a.address.length - b.address.length,
+        sorter: (a, b) => a.finalpayment - b.finalpayment,
         sortDirections: ['descend', 'ascend'],
       },
     ];
     return <Table columns={columns} dataSource={data} bordered/>;
-  }
 }
 
 export default DataTable

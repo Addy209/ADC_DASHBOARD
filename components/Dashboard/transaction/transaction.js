@@ -4,13 +4,13 @@ import styles from '../expenditure/expenditure.module.css'
 import DataTable from './datatable';
 import Chart from './tdchart';
 import {GraphQLClient, gql} from 'graphql-request'
-import {BACKEND_URL} from '../../../utils/constants'
+import {BACKEND_URL, MONTH_NAMES} from '../../../utils/constants'
 import Cookies from 'js-cookie';
 
 const { Option } = Select;
 const {Title, Text} =Typography
 
-const mb_query=gql`
+const query=gql`
 query getTransaction($fromdate:Date, $todate:Date){
   transaction(fromdate:$fromdate, todate:$todate){
     date
@@ -20,41 +20,24 @@ query getTransaction($fromdate:Date, $todate:Date){
     mbTd
     mbTdPercent
     mbBd
-  }
-}
-`
-
-const upi_query=gql`
-query getTransaction($fromdate:Date, $todate:Date){
-  transaction(fromdate:$fromdate, todate:$todate){
-    date
     upiFintxns
     upiNonfintxns
     upiTotaltxn
     upiTd
     upiTdPercent
     upiBd
-  }
-}
-`
-const imps_query=gql`
-query getTransaction($fromdate:Date, $todate:Date){
-  transaction(fromdate:$fromdate, todate:$todate){
-    date
     impsTotaltxn
     impsTd
     impsTdPercent
     impsBd
   }
-}
-`
+}`
 
 const Transaction=props=>{
 
   const [reprensent, setRepresent]=React.useState("table")
   const [respdata, setRespData]= React.useState(null)
   const [values, setValues]=React.useState({
-    query:null,
     fromdate:null,
     todate:null,
     module:null
@@ -70,7 +53,6 @@ const Transaction=props=>{
             case "MB":{
               setValues({
                 ...values,
-                query:mb_query,
                 module:value
               })
               break;
@@ -78,7 +60,6 @@ const Transaction=props=>{
             case "UPI":{
               setValues({
                 ...values,
-                query:upi_query,
                 module:value
               })
               break;
@@ -86,7 +67,6 @@ const Transaction=props=>{
             case "IMPS":{
               setValues({
                 ...values,
-                query:imps_query,
                 module:value
               })
               break
@@ -101,7 +81,7 @@ const Transaction=props=>{
         }
       }
 
-      function dateChange(date, dateString,id) {
+      const dateChange=(date, dateString,id) =>{
         let val=dateString
         if(id==="F"){
           if (dateString===""){
@@ -127,7 +107,6 @@ const Transaction=props=>{
 
       const handleClick=()=>{
         console.log(values)
-        if(values.query){
           const client= new GraphQLClient(BACKEND_URL,{
             headers:{
               authorization: `JWT ${Cookies.get('JWT')}`
@@ -138,42 +117,18 @@ const Transaction=props=>{
             fromdate:values.fromdate,
             todate:values.todate
           }
-          client.request(values.query,variables).then(data=>{
-            console.log(data)
-            let arr=null
-            if(values.module!=="IMPS"){
-            arr=data?.transaction.map((val,index)=>{
+          client.request(query,variables).then(data=>{
+            let arr=data.transaction.map((val, index)=>{
               const date=new Date(val.date)
+              const formattedDate=`${date.getDate()}-${MONTH_NAMES[date.getMonth()+1]}-${date.getFullYear()}`
               return {
-                  date:`${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
-                  fintxn:val?.mbFintxns??val?.upiFintxns,
-                  nonfintxn:val?.mbNonfintxns??val?.upiNonfintxns,
-                  totaltxn:val?.mbTotaltxn??val?.upiTotaltxn,
-                  td:val?.mbTd??val?.upiTd,
-                  td_per:val?.mbTdPercent??val?.upiTdPercent,
-                  bd:val?.mbBd??val?.upiBd,
-                  key:index
-            }})
-          }
-          else{
-            arr=data?.transaction.map((val,index)=>{
-              const date=new Date(val.date)
-                return {
-                  date:`${date.getDate()}-${date.getMonth()+1}-${date.getFullYear()}`,
-                  totaltxn:val?.impsTotaltxn,
-                  td:val?.impsTd,
-                  td_per:val?.impsTdPercent,
-                  bd:val?.impsBd,
-                  key:index
-    }
+                ...val,
+                date:formattedDate
+              }
             })
-          }
-
             setRespData(arr)
-          })
-
-        }
-      }
+            console.log(respdata)
+            })      }
 
 return(
     <>
@@ -232,7 +187,7 @@ return(
     module={values.module} 
     name="Financial Transactions" 
     label={respdata.map(val=>val.date)}
-    data={respdata.map(val=>val.fintxn)}
+    data={respdata.map(val=>values.module==="MB"?val.mbFintxns:val.upiFintxns)}
     point="red"
     border="rgba(242,108,167,0.6)"
     />
@@ -242,7 +197,7 @@ return(
     module={values.module}
     name="Non-Financial Transactions" 
     label={respdata.map(val=>val.date)}
-    data={respdata.map(val=>val.nonfintxn)}
+    data={respdata.map(val=>values.module==="MB"?val.mbNonfintxns:val.upiNonfintxns)}
     point="aquablue"
     border="rgba(148,123,211,0.6)"
      />
@@ -255,7 +210,7 @@ return(
     module={values.module}
     name="Total Transactions" 
     label={respdata.map(val=>val.date)}
-    data={respdata.map(val=>val.totaltxn)}
+    data={respdata.map(val=>values.module==="MB"?val.mbTotaltxn:values.module==="UPI"?val.upiTotaltxn:val.impsTotaltxn)}
     point="voilet"
     border="rgba(63,125,38 ,0.6)"
     />
@@ -265,7 +220,7 @@ return(
     module={values.module}
     name="Business Decline" 
     label={respdata.map(val=>val.date)}
-    data={respdata.map(val=>val.bd)}
+    data={respdata.map(val=>values.module==="MB"?val.mbBd:values.module==="UPI"?val.upiBd:val.impsBd)}
     point="tomato"
     border="rgba(241,154,62,0.6)"
     />
@@ -279,7 +234,7 @@ return(
     module={values.module}
     name="Technical Decline" 
     label={respdata.map(val=>val.date)}
-    data={respdata.map(val=>val.td)}
+    data={respdata.map(val=>values.module==="MB"?val.mbTd:values.module==="UPI"?val.upiTd:val.impsTd)}
     point="black"
     border="rgba(214,87,128,0.6)"
     />
@@ -289,7 +244,7 @@ return(
     module={values.module}
     name="Technical Decline Percentage" 
     label={respdata.map(val=>val.date)}
-    data={respdata.map(val=>val.td_per)}
+    data={respdata.map(val=>values.module==="MB"?val.mbTdPercent:values.module==="UPI"?val.upiTdPercent:val.impsTdPercent)}
     point="gold"
     border="rgba(116,79,198,0.6)"
     />

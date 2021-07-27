@@ -20,7 +20,7 @@ function Root(props) {
   console.log(props)
   return (
   <Layout>
-  <Component {...props.pageProps} />
+  <Component {...props.pageProps} loggedin={props.loggedIn}/>
   </Layout>
   )
 }
