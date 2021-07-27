@@ -16,7 +16,7 @@ function Root(props) {
       }
   },[props])
 
-  const Layout = Component.Layout || React.Fragment;
+  const Layout = Component?.Layout ?? React.Fragment;
   console.log(props)
   return (
   <Layout>
