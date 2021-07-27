@@ -42,6 +42,7 @@ query today{
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard =(props)=> {
+  console.log(props)
 
   const [resp, setResp]=React.useState(null)
   const [expensedata, setExpenseData]= React.useState([])

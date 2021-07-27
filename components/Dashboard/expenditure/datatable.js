@@ -14,7 +14,8 @@ const DataTable=props=> {
   let searchInput=null
 
   const getColumnSearchProps = dataIndex => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: function fun1({ setSelectedKeys, selectedKeys, confirm, clearFilters }){
+      return (
       <div style={{ padding: 8 }}>
         <Input
           ref={node => {
@@ -54,18 +55,19 @@ const DataTable=props=> {
           </Button>
         </Space>
       </div>
-    ),
-    filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-    onFilter: (value, record) =>
-      record[dataIndex]
+    )},
+    filterIcon: function fun2(filtered) {return(<SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />)},
+    onFilter: function fun3(value, record){
+      return (record[dataIndex]
         ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
-        : '',
-    onFilterDropdownVisibleChange: visible => {
+        : '')},
+    onFilterDropdownVisibleChange: function fun4(visible) {
       if (visible) {
         setTimeout(() => searchInput.select(), 100);
       }
     },
-    render: text =>
+    render: function fun5(text){
+      return (
       state.searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -75,7 +77,7 @@ const DataTable=props=> {
         />
       ) : (
         text
-      ),
+      ))},
   });
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
