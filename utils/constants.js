@@ -3,7 +3,7 @@ export const URLS={
     dashboard:'/adc_dashboard',
     expenditure:'/adc_dashboard/expenditure',
     transaction: '/adc_dashboard/transaction',
-    upload:'/adc_dashboard/upload'
+    upload:'/adc_dashboard/upload' 
 
 }
 
