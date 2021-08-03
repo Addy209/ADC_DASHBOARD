@@ -1,30 +1,59 @@
 import { Line } from 'react-chartjs-2';
 import React from 'react'
+import { GraphQLClient,gql } from 'graphql-request';
+import { BACKEND_URL } from '../../utils/constants';
+import Cookies from 'js-cookie';
 
-
+const query=gql`
+query{
+fifteendaytd{
+  date
+  mbTdPercent
+  upiTdPercent
+  impsTdPercent
+  mbTotaltxn
+  upiTotaltxn
+  impsTotaltxn
+}
+}
+`
 
 const TDChart=props=>{
 
-    const labels = props?.data.map((val)=>val.date);
+    const [data,setData]=React.useState([])
+
+    React.useEffect(()=>{
+      if(props.loggedIn){
+        new GraphQLClient(BACKEND_URL,{
+          headers:{
+              authorization:`JWT ${Cookies.get('JWT')}`
+          }
+      }).request(query).then(resp=>{
+          setData(resp.fifteendaytd)
+        })
+      }
+    },[])
+
+    const labels = data.map((val)=>val.date);
     
-    const data = {
+    const dataval = {
     labels: labels,
     datasets: [
         {
         label: 'Mobile Banking',
-        data: props.data.map((val)=>val.mbTdPercent),
+        data: data.map((val)=>val.mbTdPercent),
         borderColor: "rgba(219,58,52,0.6)",
         backgroundColor: "gold",
         },
         {
             label: 'UPI',
-            data: props.data.map((val)=>val.upiTdPercent),
+            data: data.map((val)=>val.upiTdPercent),
             borderColor: "rgba(154,120,247,0.6)",
             backgroundColor: "black",
         },
         {
             label: 'IMPS',
-            data: props.data.map((val)=>val.impsTdPercent),
+            data: data.map((val)=>val.impsTdPercent),
             borderColor: "rgba(69,115,82,0.6)",
             backgroundColor: "tomato",
         }
@@ -49,7 +78,7 @@ const TDChart=props=>{
       };
 
     return(
-        <Line data={data} config={config} width="100%" height="60vh" />
+        <Line data={dataval} config={config} width="100%" height="60vh" />
     )
 }
 

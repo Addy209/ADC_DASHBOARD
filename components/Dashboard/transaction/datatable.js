@@ -1,15 +1,17 @@
 import React from 'react'
 import { Table, Input, Button, Space } from 'antd';
-import Highlighter from 'react-highlight-words';
-import { SearchOutlined } from '@ant-design/icons';
+import styles from '../expenditure/expenditure.module.css'
 
 
 const  DataTable =props=> {
 
   console.log(props)
 
+  const [totaltxn, setTotalTxn]=React.useState(null)
+
     const data=props.data
-  
+
+    let fintotal=0,nonfintotal=0,all_totaltxn=0, tdtotal=0, bdtotal=0
     let columns=[]
     if(props.module=="MB"){
      columns = [
@@ -69,7 +71,17 @@ const  DataTable =props=> {
         sorter: (a, b) => a.bd - b.bd,
         sortDirections: ['descend', 'ascend'],
       }
-    ];}
+    ];
+    
+
+    data.forEach(val => {
+      fintotal+=val.mbFintxns
+      nonfintotal+=val.mbNonfintxns
+      all_totaltxn+=val.mbTotaltxn
+      tdtotal+=val.mbTd
+      bdtotal+=val.mbBd
+    });
+  }
 
     else if(props.module=="UPI"){
       columns = [
@@ -129,7 +141,17 @@ const  DataTable =props=> {
          sorter: (a, b) => a.upiBd - b.upiBd,
          sortDirections: ['descend', 'ascend'],
        }
-     ];}
+     ];
+  
+      data.forEach(val => {
+        fintotal+=val.upiFintxns
+        nonfintotal+=val.upiNonfintxns
+        all_totaltxn+=val.upiTotaltxn
+        tdtotal+=val.upiTd
+        bdtotal+=val.upiBd
+      });
+     
+    }
     else{
          columns = [
             {
@@ -174,9 +196,33 @@ const  DataTable =props=> {
               sortDirections: ['descend', 'ascend'],
             }
           ];
+        
+            data.forEach(val => {
+              all_totaltxn+=val.impsTotaltxn
+              tdtotal+=val.impsTd
+              bdtotal+=val.impsBd
+            });
   }
 
-  return <Table columns={columns} dataSource={data} bordered/>;
+  return <>
+  <Table columns={columns} dataSource={data} bordered/>
+  {all_totaltxn?
+  props.module!=="IMPS"?
+  <div className={styles.total}>
+    <div className={styles.total_field}><div>Total Financial Transactions:</div><div>{fintotal}</div></div>
+    <div className={styles.total_field}><div>Total Non-Financial Transactions:</div><div>{nonfintotal}</div></div>
+    <div className={styles.total_field}><div>Total Transactions:</div><div>{all_totaltxn}</div></div>
+    <div className={styles.total_field}><div>Total TD:</div><div>{tdtotal}</div></div>
+    <div className={styles.total_field}><div>Total BD:</div><div>{bdtotal}</div></div>
+  </div>
+  :
+  <div className={styles.total}>
+    <div className={styles.total_field}><div>Total Transactions:</div><div>{all_totaltxn}</div></div>
+    <div className={styles.total_field}><div>Total TD:</div><div>{tdtotal}</div></div>
+    <div className={styles.total_field}><div>Total BD:</div><div>{bdtotal}</div></div>
+  </div>
+  :null}
+  </>
 }
 
 export default DataTable

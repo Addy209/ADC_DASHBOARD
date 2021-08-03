@@ -4,9 +4,11 @@ import styles from './dashboard.module.css'
 import Count from './counts';
 import TDChart from './tdchart';
 import ExpenseBarChart from './expensechart';
-import request, { GraphQLClient,gql } from 'graphql-request';
+import { GraphQLClient,gql } from 'graphql-request';
 import { BACKEND_URL, MONTH_NAMES } from '../../utils/constants';
 import Cookies from 'js-cookie';
+import Deadline from './deadline';
+import ProjectChart from './projectchart';
 
 const today_query=gql`
 query today{
@@ -26,16 +28,7 @@ query today{
     impsBd
     
   }
-  fifteendaytd{
-    date
-    mbTdPercent
-    upiTdPercent
-    impsTdPercent
-    mbTotaltxn
-    upiTotaltxn
-    impsTotaltxn
-  }
-  sixmonthdata
+  
 }
 `
 
@@ -59,54 +52,7 @@ React.useEffect(()=>{
 
 client.request(today_query).then(data=>{
   console.log(data)
-  setResp(data)
-  const expenseobj=JSON.parse(data.sixmonthdata)
-  console.log(expenseobj)
-
-  const lbl=expenseobj.map(val=>{
-    return `${MONTH_NAMES[val.date__month]}-${val.date__year}`
-  })
-  const label=[...new Set(lbl)]
-  const value=[]
-  for(let i=0;i<expenseobj.length;i++){
-    let obj={}
-    for(let j=0;j<expenseobj.length;j++){
-      if(expenseobj[i]?.date__month===expenseobj[j]?.date__month){
-        obj['label']=`${MONTH_NAMES[expenseobj[i]?.date__month]}-${expenseobj[i]?.date__year}`
-        if(expenseobj[j]?.module===10){
-          obj['mb']=expenseobj[j]?.final_payment__sum
-        }
-        else if(expenseobj[j]?.module===20){
-          obj['upi']=expenseobj[j]?.final_payment__sum
-        }
-        else{
-          obj['misc']=expenseobj[j]?.final_payment__sum
-        }
-
-      }
-      }
-      if(obj){
-        value.push(obj)
-        }
-    }
-
-    let uniquevals=[]
-    let uniqueobj={}
-    for(let i in value){
-      const date=value[i].label
-      uniqueobj[date]=value[i]
-    }
-    for(let i in uniqueobj){
-      uniquevals.push(uniqueobj[i])
-    }
-    console.log(uniquevals)
-    setExpenseData(uniquevals)
-
-
-
-
-
-  
+  setResp(data) 
   
 })}
 
@@ -164,14 +110,31 @@ return (
                     
 
                 </div>
+
                 <div className={styles.charts}>
                     <div className={styles.weeklytd}>
                 <Divider orientation="left">Past Fifteen Days TD% Pattern</Divider>
-                <TDChart data={resp?resp.fifteendaytd:[]} />
+                <TDChart {...props}/>
                 </div>
                 <div className={styles.sixmonthexpense}>
                 <Divider orientation="left">Six Month Expenditure</Divider>
-                <ExpenseBarChart data={expensedata} />
+                <ExpenseBarChart {...props} />
+                </div>
+                
+                </div>
+
+                <div className={styles.projects}>
+                    <div className={styles.weeklytd}>
+                <Divider orientation="left">Projects Statistics</Divider>
+                <div className={styles.pie}>
+                <ProjectChart />
+                </div>
+                
+               
+                </div>
+                <div className={styles.sixmonthexpense}>
+                <Divider orientation="left">Projects Approaching Deadline</Divider>
+                <Deadline />
                 </div>
                 
                 </div>

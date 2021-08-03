@@ -12,15 +12,27 @@
     overflow-x: scroll;
 }
 
-.graph{
+.graph, .total_field{
     display: flex;
     flex-direction: column;
 }
 
-.upper_graph, .lower_graph{
+.upper_graph, .lower_graph, .total{
     display: flex;
     flex-direction: row;
     width:100%;
+}
+
+.total{
+    justify-content: space-evenly;
+    padding: 5vh 0 5vh 0;
+}
+
+.total_field{
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+    font-weight: bold;
 }
 
 .chart{

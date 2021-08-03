@@ -10,7 +10,8 @@ import {
   InputNumber,
   TreeSelect,
   Switch,
-  message
+  message,
+  Upload
 } from 'antd';
 import styles from '../expenditure/expenditure.module.css'
 import {TiUploadOutline} from 'react-icons/ti'
@@ -20,9 +21,9 @@ import Cookies from 'js-cookie';
 
 const expensecreate=gql`
 mutation($baseamount:Int!, $date:Date!, $description:String!, $finalamt:Int!, $fincost:Int!, $finrate:Float!, $fintxns:Int!
-  $gst:Int!, $gst_percent:Float!, $module:Int!, $nonfincost:Int!, $nonfinrate:Float!, $nonfintxns:Int!, $penalty:Int!){
+  $gst:Int!, $gst_percent:Float!, $module:Int!, $nonfincost:Int!, $nonfinrate:Float!, $nonfintxns:Int!, $penalty:Int!, $invoice:Upload){
   createExpense(date:$date, description:$description, finTxn:$fintxns, finRate:$finrate, finCost:$fincost nonfinTxn:$nonfintxns, nonfinRate:$nonfinrate,
-  							nonfinCost:$nonfincost,gstPercent:$gst_percent,gstAmt:$gst,penalty:$penalty,baseAmt:$baseamount,finalPayment:$finalamt, module:$module)
+  							nonfinCost:$nonfincost,gstPercent:$gst_percent,gstAmt:$gst,penalty:$penalty,baseAmt:$baseamount,finalPayment:$finalamt, module:$module,invoice:$invoice)
   {
     success
   }
@@ -162,6 +163,7 @@ const ExpenditureForm = (props) => {
       ...state,
       ...values,
       date:values.date.toDate().toISOString().split('T')[0],
+      invoice:values.invoice?.file??null
     }
 
     console.log(data);
@@ -201,7 +203,8 @@ const ExpenditureForm = (props) => {
             nonfinrate:state.nonfinrate,
             gst_percent:state.gst_percent,
             penalty:0,
-            description:""
+            description:"",
+            invoice:null
 
         }}
         onValuesChange={(values)=>handleChange(values)}
@@ -276,9 +279,14 @@ const ExpenditureForm = (props) => {
         </Form.Item>
       </div>
         </div>
-        <Form.Item wrapperCol={{ offset: 8, span:8 }}>
+        <Form.Item wrapperCol={{ offset: 10, span:8 }} name="invoice">
+        <Upload {...props}>
+          <Button type="primary" icon={<TiUploadOutline />}>Upload Invoice</Button>
+        </Upload>
+      </Form.Item>
+        <Form.Item wrapperCol={{ offset: 8, span:8 }} >
         <Button type="primary" htmlType="submit" className={styles.setwidth}>
-          Upload&nbsp;<TiUploadOutline size="1.5rem" style={{verticalAlign:"middle"}} />
+          Save Expenditure
         </Button>
       </Form.Item>
       </Form>

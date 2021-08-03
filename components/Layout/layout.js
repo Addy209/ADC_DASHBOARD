@@ -1,11 +1,17 @@
 import React from 'react'
 import { Layout, Menu, Button, Dropdown } from 'antd';
 import {
-  DesktopOutlined,
-  PieChartOutlined,
-  FileOutlined,
+  FundProjectionScreenOutlined,
+  FundTwoTone,
+  UserOutlined,
   UploadOutlined,
   BarChartOutlined,
+  ProjectOutlined,
+  SnippetsTwoTone,
+  DollarOutlined,
+  FileDoneOutlined,
+  PieChartTwoTone,
+  ScheduleTwoTone
 } from '@ant-design/icons';
 import {ImMobile} from 'react-icons/im'
 import styles from '../Dashboard/dashboard.module.css'
@@ -54,12 +60,12 @@ const [collapsed,setCollapse]=React.useState(true)
       <span className={styles.usertext}><span className={styles.usertext_hello}>{`Hello ${props.name} (${props.username})`}</span></span>
       </Menu.Item>
       <Menu.Item>
-        <Link rel="noopener noreferrer" href="https://www.antgroup.com">
+        <Link rel="noopener noreferrer" href="#">
           My Profile
         </Link>
       </Menu.Item>
       <Menu.Item>
-        <Link rel="noopener noreferrer" href="https://www.aliyun.com">
+        <Link rel="noopener noreferrer" href="#">
           My Tasks
         </Link>
       </Menu.Item>
@@ -76,13 +82,14 @@ return (
         <Sider collapsible collapsed={collapsed} onCollapse={()=>onCollapse()}>
           <div className="logo" />
           <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="0" icon={<MdLaptopMac fill='#fff' size="30px"/>} className={styles.logo}>
+          <Menu.Item key="0" icon={<MdLaptopMac fill='#D6AD60' size="30px"/>} className={styles.logo}>
               <h2 className={styles.title}>Digital ADC</h2>
             </Menu.Item>
-            <Menu.Item key="1" icon={<PieChartOutlined />}>
+            <Menu.Item key="1" icon={<PieChartTwoTone twoToneColor="#52c41a" />}>
               <Link href={URLS.dashboard}>Overview</Link>
             </Menu.Item>
-            <Menu.Item key="2" icon={<FaRegMoneyBillAlt />}>
+            <SubMenu key="sub1" icon={<FundTwoTone twoToneColor="#eb2f96" />} title="Analytics">
+            <Menu.Item key="2" icon={<DollarOutlined spin={true}/>}>
             <Link href={URLS.expenditure}>Expenditures</Link>
             </Menu.Item>
             <Menu.Item key="3" icon={<BarChartOutlined />}>
@@ -90,6 +97,10 @@ return (
             </Menu.Item>
             <Menu.Item key="4" icon={<UploadOutlined />}>
             <Link href={URLS.upload}>Upload Data</Link>
+            </Menu.Item>
+            </SubMenu>
+            <Menu.Item key="5" icon={<SnippetsTwoTone twoToneColor="#FBE7C6" />}>
+            <Link href={URLS.project}>Projects</Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -117,7 +128,7 @@ return (
 
 
 
-          <Footer style={{ textAlign: 'center' }}>Created for <strong>Central Bank of India&apos;s ADC Department</strong> by <strong>Aditya Kumar</strong></Footer>
+          <Footer style={{ textAlign: 'center', backgroundColor:"#001529", color:"white", fontSize:"large" }}>Created for <strong>Central Bank of India&apos;s ADC Department</strong> by <strong>Aditya Kumar (136595)</strong></Footer>
         </Layout>
       </Layout>
     );

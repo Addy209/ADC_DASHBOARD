@@ -1,0 +1,27 @@
+.project{
+    margin-top: 1.7vh;
+}
+
+.projectform, .legends{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.legends{
+    justify-content: space-evenly;
+    font-size: large;
+    padding: 5vh 0 5vh 0;
+}
+.subforms{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+}
+.submitbtn{
+    left:75%;
+}
+
+.uploadform{
+    margin-left: 55%;
+    transform: translate(-50%);
+}

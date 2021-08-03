@@ -3,7 +3,10 @@ import { Table, Input, Button, Space } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import { OmitProps } from 'antd/lib/transfer/ListBody';
-import {  MONTH_NAMES } from '../../../utils/constants';
+import {  MONTH_NAMES, MEDIA_URL } from '../../../utils/constants';
+import DocViewer, {DocViewerRenderers} from "react-doc-viewer";
+import {BsEyeFill, BsDownload} from 'react-icons/bs'
+import Link from 'next/link'
 
 const DataTable=props=> {
   const [state,setState] = React.useState({
@@ -103,8 +106,8 @@ const DataTable=props=> {
       gst:val.gstPercent,
       gstamt:val.gstAmt,
       penalty:val.penalty,
-      finalpayment:val.finalPayment
-
+      finalpayment:val.finalPayment,
+      invoice:val.invoice?MEDIA_URL+val.invoice:null
 
     }))
 
@@ -171,7 +174,15 @@ const DataTable=props=> {
         sorter: (a, b) => a.finalpayment - b.finalpayment,
         sortDirections: ['descend', 'ascend'],
       },
+      {
+        title: 'Invoice',
+        dataIndex: 'invoice',
+        key: 'invoice',
+        width: '25%',
+        render:function fun(link){ return link?<a href={link} target="_blank"  rel="noreferrer" download><Button icon={<BsDownload />}/></a>:null}
+      },
     ];
+    console.log(data)
     return <Table columns={columns} dataSource={data} bordered/>;
 }
 

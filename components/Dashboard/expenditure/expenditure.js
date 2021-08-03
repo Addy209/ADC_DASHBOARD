@@ -31,6 +31,7 @@ query($module:Int!,$fromdate:Date,$todate:Date){
     gstAmt
     penalty
     finalPayment
+    invoice
   }
 }
 
