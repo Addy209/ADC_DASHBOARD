@@ -13,7 +13,7 @@ const Chart=props=>{
         label: props.name,
         data: props.data,
         borderColor: props.border,
-        backgroundColor: props.point,
+        backgroundColor: props.border,
         }
     ]
     };
@@ -36,7 +36,7 @@ const Chart=props=>{
       };
 
     return(
-        <Line data={data} config={config} width="100%" height="50vh" />
+        <Line data={data} config={config}  height="90%" />
     )
 }
 

@@ -17,15 +17,13 @@
     flex-direction: column;
 }
 
-.upper_graph, .lower_graph{
+.upper_graph, .lower_graph, .total{
     display: flex;
     flex-direction: column;
     width:100%;
 }
 
 .total{
-    display: flex;
-    flex-direction: row;
     justify-content: space-evenly;
     padding: 5vh 0 5vh 0;
 }
@@ -66,13 +64,12 @@
     width: 75%;
 }
 
-.xlsbutton, .registeredusers{
+.xlsbutton{
     width: 100%;
     display: flex;
     justify-content: center;
     margin-bottom: 2vh;
 }
-
 
 @media screen and (max-width:750px) {
     .upper_graph, .lower_graph{

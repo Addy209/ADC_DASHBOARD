@@ -3,13 +3,13 @@ import { Layout, Menu, Button, Dropdown } from 'antd';
 import {
   FundProjectionScreenOutlined,
   FundTwoTone,
-  UserOutlined,
+  FolderAddTwoTone,
   UploadOutlined,
-  BarChartOutlined,
+  UpCircleTwoTone,
   ProjectOutlined,
   SnippetsTwoTone,
-  DollarOutlined,
-  FileDoneOutlined,
+  DollarCircleTwoTone,
+  BankTwoTone,
   PieChartTwoTone,
   ScheduleTwoTone
 } from '@ant-design/icons';
@@ -85,21 +85,21 @@ return (
           <Menu.Item key="0" icon={<MdLaptopMac fill='#D6AD60' size="30px"/>} className={styles.logo}>
               <h2 className={styles.title}>Digital ADC</h2>
             </Menu.Item>
-            <Menu.Item key="1" icon={<PieChartTwoTone twoToneColor="#52c41a" />}>
+            <Menu.Item key="1" icon={<PieChartTwoTone twoToneColor="#52c41a" style={{fontSize:"22px"}}/>}>
               <Link href={URLS.dashboard}>Overview</Link>
             </Menu.Item>
-            <SubMenu key="sub1" icon={<FundTwoTone twoToneColor="#eb2f96" />} title="Analytics">
-            <Menu.Item key="2" icon={<DollarOutlined spin={true}/>}>
+            <SubMenu key="sub1" icon={<FundTwoTone twoToneColor="#eb2f96" style={{fontSize:"22px"}} />} title="Analytics">
+            <Menu.Item key="2" icon={<DollarCircleTwoTone spin style={{fontSize:"22px"}} twoToneColor="#e9c46a"/>}>
             <Link href={URLS.expenditure}>Expenditures</Link>
             </Menu.Item>
-            <Menu.Item key="3" icon={<BarChartOutlined />}>
+            <Menu.Item key="3" icon={<BankTwoTone style={{fontSize:"22px"}} twoToneColor="#7400b8" />}>
             <Link href={URLS.transaction}>Transaction Statistics</Link>
             </Menu.Item>
-            <Menu.Item key="4" icon={<UploadOutlined />}>
+            <Menu.Item key="4" icon={<UpCircleTwoTone style={{fontSize:"22px"}} twoToneColor="#247ba0" />}>
             <Link href={URLS.upload}>Upload Data</Link>
             </Menu.Item>
             </SubMenu>
-            <Menu.Item key="5" icon={<SnippetsTwoTone twoToneColor="#FBE7C6" />}>
+            <Menu.Item key="5" icon={<FolderAddTwoTone twoToneColor="#f26419" style={{fontSize:"22px"}}/>}>
             <Link href={URLS.project}>Projects</Link>
             </Menu.Item>
           </Menu>

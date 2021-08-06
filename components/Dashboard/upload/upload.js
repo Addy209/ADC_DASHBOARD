@@ -6,6 +6,7 @@ import ExpenditureForm from './uploadexpenditure';
 import {BACKEND_URL} from '../../../utils/constants'
 import {GraphQLClient,gql} from 'graphql-request'
 import Cookies from 'js-cookie';
+import RegisteredUsers from './registeredusers';
 
 const upload_query=gql`
 mutation addfile($file:Upload!){
@@ -19,7 +20,7 @@ const { Dragger } = Upload;
 
 const UploadData=props=>{
 
-const [switchval, setSwitchVal]= React.useState({daily:true, expense:false})
+const [switchval, setSwitchVal]= React.useState({daily:true, registeredusers: true ,expense:false})
 
 const handleSwitchChange=(value, id)=>{
     switch(id){
@@ -43,6 +44,16 @@ const handleSwitchChange=(value, id)=>{
         break;
       }
 
+      case "r":{
+        setSwitchVal(state=>{
+          return{
+          ...state,
+          registeredusers:value
+          }
+        })
+        break;
+      }
+
     }
     console.log(switchval)
 }
@@ -60,11 +71,13 @@ const handleSwitchChange=(value, id)=>{
         file:info.file
       }).then(data=>{
         console.log(data)
+      }).catch(err=>{
+        console.log(err)
       })
 
     }
     if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
+      message.success(`${info.file.name} file data captured successfully. Have you updated users count? `);
     } else if (status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
   }
@@ -89,8 +102,11 @@ const onDrop=(e)=> {
   </Dragger>
   
     </div>:null}
+
+    <Divider orientation="left">Expenditure Upload &nbsp; <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked={switchval.registeredusers} onChange={(value)=>handleSwitchChange(value, "r")} /></Divider>
+        {switchval.registeredusers?<RegisteredUsers />:null}
     
-    <Divider orientation="left">Expenditure Upload &nbsp; <Switch checkedChildren="On" unCheckedChildren="Off" onChange={(value)=>handleSwitchChange(value, "e")} /></Divider>
+    <Divider orientation="left">Expenditure Upload &nbsp; <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked={switchval.expense} onChange={(value)=>handleSwitchChange(value, "e")} /></Divider>
         {switchval.expense?<ExpenditureForm module={props.module} />:null}
         </div>
     )

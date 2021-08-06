@@ -2,8 +2,7 @@ import styles from './dashboard.module.css'
 import React from 'react'
 import { Typography, Divider } from 'antd';
 import {FiServer} from 'react-icons/fi'
-import { ImMobile } from 'react-icons/im';
-import {FcMoneyTransfer} from 'react-icons/fc'
+import {FcMoneyTransfer, FcIphone, FcAcceptDatabase} from 'react-icons/fc'
 
 
 const { Title, Text } = Typography;
@@ -31,7 +30,7 @@ const Count=props=>{
 
 
             <div className={styles.icon}>
-                {props.title==="Mobile Banking"?<ImMobile fill="#fff" size="5rem" />:props.title==="UPI"?<FcMoneyTransfer fill="#fff" size="5rem" />:<FiServer fill="#fff" size="5rem" />}
+                {props.title==="Mobile Banking"?<FcIphone fill="#fff" size="5rem" />:props.title==="UPI"?<FcMoneyTransfer fill="#fff" size="5rem" />:<FcAcceptDatabase fill="#fff" size="5rem" />}
             </div>
             
             </div>

@@ -6,19 +6,15 @@ import Cookies from 'js-cookie';
 
 const query=gql`
 query{
-fifteendaytd{
-  date
-  mbTdPercent
-  upiTdPercent
-  impsTdPercent
-  mbTotaltxn
-  upiTotaltxn
-  impsTotaltxn
-}
+  incuserdata{
+    date
+    incMbusers
+    incUpiusers
+  }
 }
 `
 
-const TDChart=props=>{
+const UsersCount=props=>{
 
     const [data,setData]=React.useState([])
 
@@ -29,7 +25,7 @@ const TDChart=props=>{
               authorization:`JWT ${Cookies.get('JWT')}`
           }
       }).request(query).then(resp=>{
-          setData(resp.fifteendaytd)
+          setData(resp.incuserdata)
         })
       }
     },[])
@@ -41,21 +37,15 @@ const TDChart=props=>{
     datasets: [
         {
         label: 'Mobile Banking',
-        data: data.map((val)=>val.mbTdPercent),
+        data: data.map((val)=>val.incMbusers),
         borderColor: "#2a9d8f",
         backgroundColor: "#2a9d8f",
         },
         {
             label: 'UPI',
-            data: data.map((val)=>val.upiTdPercent),
+            data: data.map((val)=>val.incUpiusers),
             borderColor: "#a4133c",
             backgroundColor: "#a4133c",
-        },
-        {
-            label: 'IMPS',
-            data: data.map((val)=>val.impsTdPercent),
-            borderColor: "rgb(69,115,82)",
-            backgroundColor: "rgb(69,115,82)",
         }
     ]
     };
@@ -82,4 +72,4 @@ const TDChart=props=>{
     )
 }
 
-export default TDChart
+export default UsersCount

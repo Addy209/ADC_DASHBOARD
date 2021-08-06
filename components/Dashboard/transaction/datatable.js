@@ -152,7 +152,7 @@ const  DataTable =props=> {
       });
      
     }
-    else{
+    else if(props.module=="IMPS"){
          columns = [
             {
               title: 'Date',

@@ -76,12 +76,12 @@ const dataval = {
     {
       label: 'Mobile Banking',
         data: data.map(val=>val.mb?val.mb:0),
-      backgroundColor: "rgba(241,81,82,0.75)",
+      backgroundColor: "#2a9d8f",
     },
     {
       label: 'UPI',
         data: data.map(val=>val.upi?val.upi:0),
-      backgroundColor: "rgba(36,123,160,0.75)",
+      backgroundColor: "#a4133c",
     },
     {
       label: 'Misc',
@@ -113,7 +113,7 @@ const config = {
     }
   };
 
-return <Bar data={dataval} config={config} width="100%" height="60vh" />
+return <Bar data={dataval} config={config} height="85%" />
 }
 
 export default ExpenseBarChart

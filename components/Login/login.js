@@ -49,7 +49,7 @@ const Login=(props)=>{
 
     return (
         <div className={styles.logindiv}>
-            <Title className={styles.title}>Digital ADC</Title>
+            <Title className={styles.title}>ADC Dashboard</Title>
 
             <div className={styles.loginbox}>
                 <Image src="/cbi.jpg" height='100px' width='250px' />

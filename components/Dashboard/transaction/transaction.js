@@ -43,6 +43,8 @@ const Transaction=props=>{
     module:null
   })
 
+  console.log(values)
+
     const handleChange=(value,mod) =>{
         console.log(`selected ${value}`);
         if(mod==="M"){
@@ -164,7 +166,7 @@ return(
     <Button type="primary" onClick={handleClick}>Go</Button>
     </div>
     
-    {respdata?
+    {respdata && values.module?
     reprensent==="table"?
     <div>
     <Divider orientation="left">Tabular Representation</Divider>
@@ -189,7 +191,7 @@ return(
     label={respdata.map(val=>val.date)}
     data={respdata.map(val=>values.module==="MB"?val.mbFintxns:val.upiFintxns)}
     point="red"
-    border="rgba(242,108,167,0.6)"
+    border="rgb(242,108,167)"
     />
     </div>
     <div className={styles.chart}>
@@ -199,7 +201,7 @@ return(
     label={respdata.map(val=>val.date)}
     data={respdata.map(val=>values.module==="MB"?val.mbNonfintxns:val.upiNonfintxns)}
     point="aquablue"
-    border="rgba(148,123,211,0.6)"
+    border="rgb(148,123,211)"
      />
     </div>
     </div>:null}
@@ -212,7 +214,7 @@ return(
     label={respdata.map(val=>val.date)}
     data={respdata.map(val=>values.module==="MB"?val.mbTotaltxn:values.module==="UPI"?val.upiTotaltxn:val.impsTotaltxn)}
     point="voilet"
-    border="rgba(63,125,38 ,0.6)"
+    border="rgb(63,125,38)"
     />
     </div>
     <div className={styles.chart}>
@@ -222,7 +224,7 @@ return(
     label={respdata.map(val=>val.date)}
     data={respdata.map(val=>values.module==="MB"?val.mbBd:values.module==="UPI"?val.upiBd:val.impsBd)}
     point="tomato"
-    border="rgba(241,154,62,0.6)"
+    border="rgb(241,154,62)"
     />
     </div>
     </div>
@@ -236,7 +238,7 @@ return(
     label={respdata.map(val=>val.date)}
     data={respdata.map(val=>values.module==="MB"?val.mbTd:values.module==="UPI"?val.upiTd:val.impsTd)}
     point="black"
-    border="rgba(214,87,128,0.6)"
+    border="rgb(214,87,128)"
     />
     </div>
     <div className={styles.chart}>
@@ -246,7 +248,7 @@ return(
     label={respdata.map(val=>val.date)}
     data={respdata.map(val=>values.module==="MB"?val.mbTdPercent:values.module==="UPI"?val.upiTdPercent:val.impsTdPercent)}
     point="gold"
-    border="rgba(116,79,198,0.6)"
+    border="rgb(116,79,198)"
     />
     </div>
     </div>

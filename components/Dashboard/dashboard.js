@@ -9,6 +9,8 @@ import { BACKEND_URL, MONTH_NAMES } from '../../utils/constants';
 import Cookies from 'js-cookie';
 import Deadline from './deadline';
 import ProjectChart from './projectchart';
+import UsersCount from './userscount';
+import TotalUser from './totaluserscount';
 
 const today_query=gql`
 query today{
@@ -111,20 +113,39 @@ return (
 
                 </div>
 
+                <div className={styles.stats}>
+                  <Divider orientation="left">Total Registered Users</Divider>
+                    <div className={styles.totalusers}>
+                    <TotalUser {...props} />
+                    </div>
+                    
+
+
+                  </div>
+                  <div className={styles.weeklytd}>
+                  <Divider orientation="left">Past Fifteen Days Registered Users Trend</Divider>
+                  <UsersCount {...props}/>
+                  </div>
+
+
+
                 <div className={styles.charts}>
                     <div className={styles.weeklytd}>
-                <Divider orientation="left">Past Fifteen Days TD% Pattern</Divider>
+                <Divider orientation="left">Past Thirty Days TD% Pattern</Divider>
                 <TDChart {...props}/>
                 </div>
-                <div className={styles.sixmonthexpense}>
-                <Divider orientation="left">Six Month Expenditure</Divider>
+                <div className={styles.weeklytd}>
+                <Divider orientation="left">Past One Year Expenditure</Divider>
                 <ExpenseBarChart {...props} />
                 </div>
                 
                 </div>
 
+
+
+
                 <div className={styles.projects}>
-                    <div className={styles.weeklytd}>
+                    <div className={styles.projectstats}>
                 <Divider orientation="left">Projects Statistics</Divider>
                 <div className={styles.pie}>
                 <ProjectChart />
@@ -132,7 +153,7 @@ return (
                 
                
                 </div>
-                <div className={styles.sixmonthexpense}>
+                <div className={styles.projectstats}>
                 <Divider orientation="left">Projects Approaching Deadline</Divider>
                 <Deadline />
                 </div>
