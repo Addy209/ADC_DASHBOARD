@@ -114,7 +114,7 @@ return (
                 </div>
 
                 <div className={styles.stats}>
-                  <Divider orientation="left">Total Registered Users</Divider>
+                  <Divider orientation="middle">Total Registered Users</Divider>
                     <div className={styles.totalusers}>
                     <TotalUser {...props} />
                     </div>

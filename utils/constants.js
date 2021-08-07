@@ -12,8 +12,8 @@ export const URLS={
 }
 
 
-export const BACKEND_URL="http://localhost:8000/graphql/"
-export const MEDIA_URL="http://localhost:8000/media/"
+export const BACKEND_URL="https://localhost:8000/graphql/"
+export const MEDIA_URL="https://localhost:8000/media/"
 
 
 export const MONTH_NAMES=["",'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

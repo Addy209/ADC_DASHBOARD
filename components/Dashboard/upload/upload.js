@@ -1,6 +1,6 @@
 import React from 'react'
-import { Divider, Upload, Switch, message } from 'antd';
-import { FileAddOutlined } from '@ant-design/icons';
+import { Divider, Upload, Switch, message, Button } from 'antd';
+import { FileAddOutlined, UploadOutlined } from '@ant-design/icons';
 import styles from '../expenditure/expenditure.module.css'
 import ExpenditureForm from './uploadexpenditure';
 import {BACKEND_URL} from '../../../utils/constants'
@@ -21,6 +21,7 @@ const { Dragger } = Upload;
 const UploadData=props=>{
 
 const [switchval, setSwitchVal]= React.useState({daily:true, registeredusers: true ,expense:false})
+const [file, setFile]= React.useState(null)
 
 const handleSwitchChange=(value, id)=>{
     switch(id){
@@ -58,10 +59,11 @@ const handleSwitchChange=(value, id)=>{
     console.log(switchval)
 }
 
- const onChange=(info)=> {
+
+ const onClick=()=> {
+   const info=file
     const { status } = info.file;
     console.log(info)
-    if (status === 'uploading') {
       const client=new GraphQLClient(BACKEND_URL, {
         headers:{
           authorization:`JWT ${Cookies.get('JWT')}`
@@ -70,17 +72,11 @@ const handleSwitchChange=(value, id)=>{
       client.request(upload_query,{
         file:info.file
       }).then(data=>{
-        console.log(data)
+        message.success(`${info.file.name} file data captured successfully. Have you updated users count? `);
       }).catch(err=>{
-        console.log(err)
+        message.error("Duplicate Entry Found!, If correction is needed, Please do it from Admin Panel")
       })
-
-    }
-    if (status === 'done') {
-      message.success(`${info.file.name} file data captured successfully. Have you updated users count? `);
-    } else if (status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-  }
+   
 };
 
 const onDrop=(e)=> {
@@ -91,7 +87,9 @@ const onDrop=(e)=> {
         <div>
             <Divider orientation="left">Daily Transaction Sheet Upload &nbsp; <Switch defaultChecked={switchval.daily} checkedChildren="On" unCheckedChildren="Off" onChange={(value)=>handleSwitchChange(value, "d")} /></Divider>
             {switchval.daily?<div className={styles.upload}>
-            <Dragger onChange={onChange} onDrop={onDrop} className={styles.dragger}>
+            <Dragger onChange={(info)=>{
+              setFile(info)
+            }} onDrop={onDrop} className={styles.dragger}>
     <p className="ant-upload-drag-icon">
     <FileAddOutlined />
     </p>
@@ -100,7 +98,9 @@ const onDrop=(e)=> {
       &nbsp;&nbsp;&nbsp;&nbsp;Please upload daily transaction report sheet.&nbsp;&nbsp;&nbsp;&nbsp;
     </p>
   </Dragger>
-  
+  <div style={{marginTop:"2vh"}}>
+  <Button type="primary" onClick={onClick} icon={<UploadOutlined />}>Upload</Button>
+  </div>
     </div>:null}
 
     <Divider orientation="left">Expenditure Upload &nbsp; <Switch checkedChildren="On" unCheckedChildren="Off" defaultChecked={switchval.registeredusers} onChange={(value)=>handleSwitchChange(value, "r")} /></Divider>
