@@ -8,6 +8,7 @@ export const URLS = {
   transaction: "/adc_dashboard/analytics/transaction",
   upload: "/adc_dashboard/analytics/upload",
   project: "/adc_dashboard/adc_project",
+  documents: "/adc_dashboard/documents",
 };
 
 export const BACKEND_URL = "http://localhost:8000/graphql/";

@@ -1,0 +1,8 @@
+.document {
+  margin-top: 2vh;
+}
+
+.upload {
+  display: flex;
+  justify-content: center;
+}

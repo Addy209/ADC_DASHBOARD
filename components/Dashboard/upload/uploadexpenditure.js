@@ -185,14 +185,7 @@ const ExpenditureForm = (props) => {
       invoice: values.invoice?.file ?? null,
     };
 
-    console.log(data);
-    const client = new GraphQLClient(BACKEND_URL, {
-      headers: {
-        authorization: `JWT ${Cookies.get("JWT")}`,
-      },
-    });
-
-    client
+    props.client
       .request(expensecreate, data)
       .then((data) => {
         console.log(data);

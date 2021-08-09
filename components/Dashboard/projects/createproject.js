@@ -129,19 +129,13 @@ const CreateProject = (props) => {
         .split("T")[0],
       liveDate: values.liveDate.toDate().toISOString().split("T")[0],
     };
-
-    const client = new GraphQLClient(BACKEND_URL, {
-      headers: {
-        authorization: `JWT ${Cookies.get("JWT")}`,
-      },
-    });
     if (props?.values?.id) {
       data = {
         ...data,
         id: props.values.id,
       };
       console.log(data);
-      client
+      props.client
         .request(updateQuery, data)
         .then((res) => {
           message.success("Project Updated Successfully");
@@ -152,7 +146,7 @@ const CreateProject = (props) => {
           message.error("Something Went Wrong");
         });
     } else {
-      client
+      props.client
         .request(createQuery, data)
         .then((res) => {
           message.success("Project Saved Successfully");

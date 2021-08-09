@@ -31,14 +31,8 @@ const DocumentUpload = (props) => {
       doc: values.doc.file,
       id: props.id,
     };
-    console.log(data);
-    const client = new GraphQLClient(BACKEND_URL, {
-      headers: {
-        authorization: `JWT ${Cookies.get("JWT")}`,
-      },
-    });
 
-    client.request(uploadMutation, data).then((resp) => {
+    props.client.request(uploadMutation, data).then((resp) => {
       console.log(resp);
       form.resetFields();
       props.refetch(resp.documentUpload.savedDocument);

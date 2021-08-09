@@ -1,75 +1,68 @@
-import { Line } from 'react-chartjs-2';
-import React from 'react'
-import { GraphQLClient,gql } from 'graphql-request';
-import { BACKEND_URL } from '../../utils/constants';
-import Cookies from 'js-cookie';
+import { Line } from "react-chartjs-2";
+import React from "react";
+import { GraphQLClient, gql } from "graphql-request";
+import { BACKEND_URL } from "../../utils/constants";
+import Cookies from "js-cookie";
 
-const query=gql`
-query{
-  incuserdata{
-    date
-    incMbusers
-    incUpiusers
+const query = gql`
+  query {
+    incuserdata {
+      date
+      incMbusers
+      incUpiusers
+    }
   }
-}
-`
+`;
 
-const UsersCount=props=>{
+const UsersCount = (props) => {
+  const [data, setData] = React.useState([]);
 
-    const [data,setData]=React.useState([])
+  React.useEffect(() => {
+    if (props.loggedIn) {
+      props.client.request(query).then((resp) => {
+        setData(resp.incuserdata);
+      });
+    }
+  }, []);
 
-    React.useEffect(()=>{
-      if(props.loggedIn){
-        new GraphQLClient(BACKEND_URL,{
-          headers:{
-              authorization:`JWT ${Cookies.get('JWT')}`
-          }
-      }).request(query).then(resp=>{
-          setData(resp.incuserdata)
-        })
-      }
-    },[])
+  const labels = data.map((val) => val.date);
 
-    const labels = data.map((val)=>val.date);
-    
-    const dataval = {
+  const dataval = {
     labels: labels,
     datasets: [
-        {
-        label: 'Mobile Banking',
-        data: data.map((val)=>val.incMbusers),
+      {
+        label: "Mobile Banking",
+        data: data.map((val) => val.incMbusers),
         borderColor: "#2a9d8f",
         backgroundColor: "#2a9d8f",
-        },
-        {
-            label: 'UPI',
-            data: data.map((val)=>val.incUpiusers),
-            borderColor: "#a4133c",
-            backgroundColor: "#a4133c",
-        }
-    ]
-    };
-    
-    const config = {
-        type: 'line',
-        data: data,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'top',
-            },
-            title: {
-              display: true,
-              text: 'Chart.js Line Chart'
-            }
-          }
-        },
-      };
+      },
+      {
+        label: "UPI",
+        data: data.map((val) => val.incUpiusers),
+        borderColor: "#a4133c",
+        backgroundColor: "#a4133c",
+      },
+    ],
+  };
 
-    return(
-        <Line data={dataval} config={config}  height="85%" />
-    )
-}
+  const config = {
+    type: "line",
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top",
+        },
+        title: {
+          display: true,
+          text: "Chart.js Line Chart",
+        },
+      },
+    },
+  };
 
-export default UsersCount
+  return <Line data={dataval} config={config} height="85%" />;
+};
+
+export default UsersCount;
