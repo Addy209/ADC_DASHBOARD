@@ -3,13 +3,14 @@ import { Tabs, Radio } from "antd";
 import MyFiles from "./myfiles";
 import SharedFiles from "./sharedfiles";
 import { FcSearch } from "react-icons/fc";
+import SearchFiles from "./search";
 
 const { TabPane } = Tabs;
 
 const FileTabs = (props) => {
   return (
     <div>
-      <Tabs defaultActiveKey="1" type="card" size="large">
+      <Tabs defaultActiveKey="1" type="card" size="large" centered>
         <TabPane tab="My Files" key="1">
           <MyFiles {...props} />
         </TabPane>
@@ -25,7 +26,7 @@ const FileTabs = (props) => {
           }
           key="3"
         >
-          <SharedFiles {...props} />
+          <SearchFiles {...props} />
         </TabPane>
       </Tabs>
     </div>

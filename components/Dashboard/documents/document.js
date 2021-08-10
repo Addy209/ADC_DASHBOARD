@@ -64,7 +64,7 @@ const Document = (props) => {
 
   return (
     <div className={styles.document}>
-      <Divider orientation="left">Upload Your Documents</Divider>
+      <Divider orientation="left">Upload Documents</Divider>
       <div className={styles.upload}>
         <Form
           form={form}

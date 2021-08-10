@@ -10,6 +10,29 @@ import {
   CheckCircleTwoTone,
   CloseCircleTwoTone,
 } from "@ant-design/icons";
+import SearchModal from "./searchproject";
+import { gql } from "graphql-request";
+
+const allprojectquery = gql`
+  query {
+    allproject {
+      id
+      devCompleted
+      testCompleted
+      signoff
+      live
+      module {
+        module
+      }
+      priority {
+        priority
+      }
+      name
+      requestedby
+      livedate
+    }
+  }
+`;
 
 const Projects = (props) => {
   const [create, setCreate] = React.useState(false);
@@ -19,38 +42,45 @@ const Projects = (props) => {
   });
   console.log(projectData);
   React.useEffect(() => {
-    if (props.allproject) {
-      let ongoingProject = props.allproject.map((val, index) => {
-        if (!val.live) {
-          return val;
-        } else {
-          return null;
-        }
-      });
-      let completedprojects = props.allproject.map((val, index) => {
-        if (val.live) {
-          return val;
-        } else {
-          return null;
-        }
-      });
+    if (props.loggedIn) {
+      props.client.request(allprojectquery).then((res) => {
+        const allproject = res.allproject;
+        if (allproject) {
+          let ongoingProject = allproject.map((val, index) => {
+            if (!val.live) {
+              return val;
+            } else {
+              return null;
+            }
+          });
+          let completedprojects = allproject.map((val, index) => {
+            if (val.live) {
+              return val;
+            } else {
+              return null;
+            }
+          });
 
-      ongoingProject = ongoingProject.filter((val) => val != null);
-      completedprojects = completedprojects.filter((val) => val != null);
+          ongoingProject = ongoingProject.filter((val) => val != null);
+          completedprojects = completedprojects.filter((val) => val != null);
 
-      setProjectData({
-        ongoing: ongoingProject,
-        completed: completedprojects,
+          setProjectData({
+            ongoing: ongoingProject,
+            completed: completedprojects,
+          });
+        }
       });
     }
-  }, [props.allProject]);
+  }, []);
 
   return (
     <div className={styles.project}>
       <div>
-        <Button onClick={() => setCreate(!create)} type="primary">
+        <Button onClick={() => setCreate(!create)} type="primary" size="large">
           {create ? "Close" : "Create New Project"}
         </Button>
+        &nbsp;
+        <SearchModal {...props} />
       </div>
       {create ? (
         <div>

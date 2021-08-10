@@ -9,6 +9,7 @@ import {
   FileWordTwoTone,
   FileZipTwoTone,
   FileTwoTone,
+  Html5TwoTone,
 } from "@ant-design/icons";
 import { gql } from "graphql-request";
 import {
@@ -121,6 +122,8 @@ const MyFiles = (props) => {
           icon = <FilePptTwoTone twoToneColor="orange" style={iconstyle} />;
         } else if (val.type.includes("zip")) {
           icon = <FileZipTwoTone twoToneColor="#DFC5A4" style={iconstyle} />;
+        } else if (val.type.includes("html")) {
+          icon = <Html5TwoTone twoToneColor="#FC490B" style={iconstyle} />;
         } else if (val.type.includes("text")) {
           icon = <FileTextTwoTone twoToneColor="gray" style={iconstyle} />;
         } else if (val.type.includes("document")) {

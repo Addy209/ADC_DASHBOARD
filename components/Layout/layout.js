@@ -59,7 +59,7 @@ const SiderDemo = (props) => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible collapsed={collapsed} onCollapse={() => onCollapse()}>
-        <div className="logo" />
+        <div className="logo" style={{ position: "fixed" }} />
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
           <Menu.Item
             key="1"
@@ -113,7 +113,10 @@ const SiderDemo = (props) => {
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 5 }}>
+        <Header
+          className="site-layout-background"
+          style={{ padding: 5, position: "sticky", top: 0, zIndex: 2 }}
+        >
           <div className={styles.header}>
             <div className={styles.left}>
               <pre className={styles.heading}>
