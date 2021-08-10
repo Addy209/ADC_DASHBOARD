@@ -56,7 +56,6 @@ const SharedFiles = (props) => {
     });
   }, []);
 
-  console.log(data);
   return (
     <Card title="My Files">
       {data.map((val, index) => {
@@ -89,14 +88,14 @@ const SharedFiles = (props) => {
               style={{ width: 225 }}
               cover={icon}
               actions={[
-                <Tooltip title="Download File">
+                <Tooltip title="Download File" key="download">
                   <a
                     href={`${MEDIA_URL}${val.file}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     download
                   >
-                    <AiOutlineDownload key="download" size="2rem" />
+                    <AiOutlineDownload size="2rem" />
                   </a>
                 </Tooltip>,
               ]}

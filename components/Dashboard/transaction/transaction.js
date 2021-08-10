@@ -43,10 +43,7 @@ const Transaction = (props) => {
     module: null,
   });
 
-  console.log(values);
-
   const handleChange = (value, mod) => {
-    console.log(`selected ${value}`);
     if (mod === "M") {
       if (value === "00") {
         return null;
@@ -101,8 +98,6 @@ const Transaction = (props) => {
         todate: val,
       });
     }
-
-    console.log(values);
   };
 
   const handleClick = () => {
@@ -122,7 +117,6 @@ const Transaction = (props) => {
         };
       });
       setRespData(arr);
-      console.log(respdata);
     });
   };
 

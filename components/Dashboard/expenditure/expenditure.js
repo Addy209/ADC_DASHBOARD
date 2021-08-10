@@ -44,7 +44,6 @@ const Expenditure = (props) => {
   });
 
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
     setValues({
       ...values,
       module: value,
@@ -70,14 +69,11 @@ const Expenditure = (props) => {
         todate: val,
       });
     }
-
-    console.log(values);
   };
 
   const handleClick = () => {
     if (values.module) {
       props.client.request(expense_query, values).then((data) => {
-        console.log(data);
         setRespData(data);
       });
     }

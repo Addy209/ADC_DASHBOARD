@@ -28,12 +28,10 @@ const Login = (props) => {
   if (props.loggedIn) {
     router.push(URLS.dashboard);
   }
-  console.log(props);
   const onFinish = (values) => {
     props.client
       .request(login_mut, values)
       .then((data) => {
-        console.log(data);
         Cookies.set("TOKEN", data.tokenAuth.token);
         props.login(true);
       })
@@ -42,9 +40,7 @@ const Login = (props) => {
       });
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
-  };
+  const onFinishFailed = (errorInfo) => {};
 
   return (
     <div className={styles.logindiv}>

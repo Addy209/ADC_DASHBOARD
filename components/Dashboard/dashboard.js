@@ -10,7 +10,6 @@ import Cookies from "js-cookie";
 import Deadline from "./deadline";
 import ProjectChart from "./projectchart";
 import UsersCount from "./userscount";
-import TotalUser from "./totaluserscount";
 
 const today_query = gql`
   query today {
@@ -35,8 +34,6 @@ const today_query = gql`
 const { Header, Content, Footer, Sider } = Layout;
 
 const Dashboard = (props) => {
-  console.log(props);
-
   const [resp, setResp] = React.useState(null);
   const [expensedata, setExpenseData] = React.useState([]);
 
@@ -45,14 +42,12 @@ const Dashboard = (props) => {
   React.useEffect(() => {
     if (props.loggedIn) {
       props.client.request(today_query).then((data) => {
-        console.log(data);
         setResp(data);
       });
     }
   }, []);
 
   const onCollapse = () => {
-    console.log(collapsed);
     setCollapse((val) => {
       return !val;
     });
@@ -123,14 +118,9 @@ const Dashboard = (props) => {
       </div>
 
       <div className={styles.stats}>
-        <Divider orientation="middle">Total Registered Users</Divider>
-        <div className={styles.totalusers}>
-          <TotalUser {...props} />
-        </div>
-
         <div className={styles.weeklytd}>
           <Divider orientation="left">
-            Past Fifteen Days Registered Users Trend
+            Past Thirty Days Registered Users Trend
           </Divider>
           <UsersCount {...props} />
         </div>

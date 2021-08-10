@@ -12,7 +12,6 @@ const Home = (props) => {
   // if(!props.loggedIn){
   //     router.push(URLS.home)
   // }
-  console.log(props);
   return <Dashboard {...props} />;
 };
 

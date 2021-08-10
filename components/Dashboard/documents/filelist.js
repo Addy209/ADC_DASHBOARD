@@ -62,14 +62,14 @@ const FileList = (props) => {
           return (
             <List.Item
               actions={[
-                <Tooltip title="Download File">
+                <Tooltip title="Download File" key="download">
                   <a
                     href={`${MEDIA_URL}${val.file}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     download
                   >
-                    <AiOutlineDownload key="download" size="2rem" />
+                    <AiOutlineDownload size="2rem" />
                   </a>
                 </Tooltip>,
               ]}

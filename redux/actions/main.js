@@ -14,7 +14,6 @@ const me_query = gql`
 `;
 
 export const setToken = (value) => {
-  console.log("I am here");
   return (dispatch) => {
     const client = new GraphQLClient(BACKEND_URL, {
       headers: {
@@ -22,7 +21,6 @@ export const setToken = (value) => {
       },
     });
     client.request(me_query).then((data) => {
-      console.log(data);
       dispatch({
         type: t.SET_TOKEN,
         payload: {
@@ -36,7 +34,6 @@ export const setToken = (value) => {
 };
 
 export const Logout = () => {
-  console.log("I am logging out");
   Cookies.remove("TOKEN");
   return (dispatch) => {
     dispatch({

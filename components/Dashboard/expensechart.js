@@ -19,7 +19,6 @@ const ExpenseBarChart = (props) => {
     if (props.loggedIn) {
       props.client.request(query).then((resp) => {
         const expenseobj = JSON.parse(resp.sixmonthdata);
-        console.log(expenseobj);
 
         const lbl = expenseobj.map((val) => {
           return `${MONTH_NAMES[val.date__month]}-${val.date__year}`;
@@ -56,7 +55,6 @@ const ExpenseBarChart = (props) => {
         for (let i in uniqueobj) {
           uniquevals.push(uniqueobj[i]);
         }
-        console.log(uniquevals);
         setData(uniquevals);
       });
     }

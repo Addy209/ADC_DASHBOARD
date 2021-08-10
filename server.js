@@ -31,3 +31,4 @@ app
   });
 
 //"next dev",
+//NODE_ENV=prod node server.js

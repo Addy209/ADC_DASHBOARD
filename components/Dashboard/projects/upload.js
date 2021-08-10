@@ -33,7 +33,6 @@ const DocumentUpload = (props) => {
     };
 
     props.client.request(uploadMutation, data).then((resp) => {
-      console.log(resp);
       form.resetFields();
       props.refetch(resp.documentUpload.savedDocument);
     });

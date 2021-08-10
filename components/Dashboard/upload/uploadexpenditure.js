@@ -76,7 +76,6 @@ const ExpenditureForm = (props) => {
 
   const SetGST = (base, per = null, pen = null) => {
     const gst = per ?? state.gst_percent ?? 0;
-    console.log(gst);
     const penalty = pen ?? state.penalty ?? 0;
     const gst_amt = Math.round((base * gst) / 100);
     let final_amt = base + gst_amt - penalty;
@@ -188,7 +187,6 @@ const ExpenditureForm = (props) => {
     props.client
       .request(expensecreate, data)
       .then((data) => {
-        console.log(data);
         if (data.createExpense.success) {
           message.success("Expense Saved Successfully");
         }

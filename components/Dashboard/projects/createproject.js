@@ -134,12 +134,10 @@ const CreateProject = (props) => {
         ...data,
         id: props.values.id,
       };
-      console.log(data);
       props.client
         .request(updateQuery, data)
         .then((res) => {
           message.success("Project Updated Successfully");
-          console.log(res);
           props.refetch(res.updateProject);
         })
         .catch((err) => {
@@ -152,15 +150,13 @@ const CreateProject = (props) => {
           message.success("Project Saved Successfully");
           setTimeout(() => {
             router.push(`${URLS.project}/${res.createProject.project.id}`);
-          }, 5000);
+          }, 2000);
         })
         .catch((err) => {
           message.error("Something Went Wrong");
         });
     }
   };
-
-  console.log(props.module);
 
   return (
     <>

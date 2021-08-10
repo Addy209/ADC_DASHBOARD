@@ -40,7 +40,6 @@ const Projects = (props) => {
     ongoing: [],
     completed: [],
   });
-  console.log(projectData);
   React.useEffect(() => {
     if (props.loggedIn) {
       props.client.request(allprojectquery).then((res) => {

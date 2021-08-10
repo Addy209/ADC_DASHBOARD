@@ -16,7 +16,6 @@ const ProjectChart = (props) => {
   React.useEffect(() => {
     if (props.loggedIn) {
       props.client.request(countQuery).then((resp) => {
-        console.log("RESPONSE", resp);
         const parsedresp = JSON.parse(resp.counts);
         setCounts(parsedresp);
       });

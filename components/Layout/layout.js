@@ -34,7 +34,6 @@ const font30 = { fontSize: "30px" };
 const font26 = { fontSize: "26px" };
 
 const SiderDemo = (props) => {
-  console.log(props);
   const router = useRouter();
   React.useEffect(() => {
     if (!props.loggedIn) {
@@ -45,7 +44,6 @@ const SiderDemo = (props) => {
   const [collapsed, setCollapse] = React.useState(true);
 
   const onCollapse = () => {
-    console.log(collapsed);
     setCollapse((val) => {
       return !val;
     });
@@ -58,8 +56,19 @@ const SiderDemo = (props) => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider collapsible collapsed={collapsed} onCollapse={() => onCollapse()}>
-        <div className="logo" style={{ position: "fixed" }} />
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={() => onCollapse()}
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "sticky",
+          left: 0,
+          top: 0,
+        }}
+      >
+        <div className="logo" style={{ marginTop: "2vh" }} />
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
           <Menu.Item
             key="1"
@@ -105,7 +114,7 @@ const SiderDemo = (props) => {
           </Menu.Item>
 
           <Menu.Item
-            key="6"
+            key="7"
             icon={<FolderAddTwoTone twoToneColor="#4cc9f0" style={font30} />}
           >
             <Link href={URLS.documents}>Documents</Link>

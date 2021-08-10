@@ -35,7 +35,6 @@ const RegisteredUsers = (props) => {
     props.client
       .request(uploadMutation, data)
       .then((resp) => {
-        console.log(resp);
         message.success("Users Count Updated Successfully");
         form.resetFields();
       })

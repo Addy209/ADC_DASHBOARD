@@ -41,7 +41,6 @@ const Document = (props) => {
       ...values,
       file: values.file.file,
     };
-    console.log(data);
     if (data.file.size > 10485760) {
       message.error("Max Allowed Upload File Size is 10MB");
       return 0;
@@ -49,7 +48,6 @@ const Document = (props) => {
     props.client
       .request(uploadMutation, data)
       .then((resp) => {
-        console.log(resp);
         form.resetFields();
         setUpload(resp?.savefile?.files);
       })

@@ -16,7 +16,6 @@ const formdata_query = gql`
 `;
 
 const Home = (props) => {
-  console.log(props);
   return <UploadData {...props} />;
 };
 

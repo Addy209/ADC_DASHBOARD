@@ -98,12 +98,10 @@ const MyFiles = (props) => {
 
   const handleDelete = (id) => {
     props.client.request(deletemutation, { id: id }).then((resp) => {
-      console.log(resp.deletefile);
       setData(resp.deletefile.files);
     });
   };
 
-  console.log(data);
   return (
     <Card title="My Files">
       {data.map((val, index) => {
@@ -161,21 +159,20 @@ const MyFiles = (props) => {
               style={{ width: 225 }}
               cover={icon}
               actions={[
-                <Tooltip title="Delete File">
+                <Tooltip title="Delete File" key="delete">
                   <AiOutlineDelete
-                    key="delete"
                     size="2rem"
                     onClick={() => handleDelete(val.id)}
                   />
                 </Tooltip>,
-                <Tooltip title="Download File">
+                <Tooltip title="Download File" key="download">
                   <a
                     href={`${MEDIA_URL}${val.file}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     download
                   >
-                    <AiOutlineDownload key="download" size="2rem" />
+                    <AiOutlineDownload size="2rem" />
                   </a>
                 </Tooltip>,
                 private_icon,

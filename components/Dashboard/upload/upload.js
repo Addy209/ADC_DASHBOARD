@@ -57,7 +57,6 @@ const UploadData = (props) => {
         break;
       }
     }
-    console.log(switchval);
   };
 
   const onClick = () => {
@@ -79,9 +78,7 @@ const UploadData = (props) => {
       });
   };
 
-  const onDrop = (e) => {
-    console.log("Dropped files", e.dataTransfer.files);
-  };
+  const onDrop = (e) => {};
 
   return (
     <div>
