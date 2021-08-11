@@ -42,3 +42,12 @@ export const Logout = () => {
     });
   };
 };
+
+export const setRegUsers = (regusers) => {
+  return (dispatch) => {
+    dispatch({
+      type: t.REG,
+      payload: regusers,
+    });
+  };
+};

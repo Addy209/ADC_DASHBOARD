@@ -19,7 +19,14 @@ const formdata_query = gql`
 `;
 
 const Home = (props) => {
-  return <Projects {...props} />;
+  return (
+    <>
+      <Head>
+        <title>Project</title>
+      </Head>
+      <Projects {...props} />
+    </>
+  );
 };
 
 export async function getServerSideProps(context) {

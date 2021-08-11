@@ -16,7 +16,15 @@ const formdata_query = gql`
 `;
 
 const Home = (props) => {
-  return <UploadData {...props} />;
+  return (
+    <>
+      <Head>
+        <title>Upload Data</title>
+      </Head>
+
+      <UploadData {...props} />
+    </>
+  );
 };
 
 export async function getServerSideProps(context) {

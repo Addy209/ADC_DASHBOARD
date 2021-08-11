@@ -12,7 +12,14 @@ const Home = (props) => {
   // if(!props.loggedIn){
   //     router.push(URLS.home)
   // }
-  return <Dashboard {...props} />;
+  return (
+    <>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
+      <Dashboard {...props} />
+    </>
+  );
 };
 
 const mapStateToProps = (state) => ({

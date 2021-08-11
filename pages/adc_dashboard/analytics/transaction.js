@@ -4,7 +4,15 @@ import SiderDemo from "../../../components/Layout/layout";
 import Transaction from "../../../components/Dashboard/transaction/transaction";
 
 export default function Home(props) {
-  return <Transaction {...props} />;
+  return (
+    <>
+      <Head>
+        <title>Transactions</title>
+      </Head>
+
+      <Transaction {...props} />
+    </>
+  );
 }
 
 Home.Layout = SiderDemo;

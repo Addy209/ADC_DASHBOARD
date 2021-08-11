@@ -117,7 +117,7 @@ const SiderDemo = (props) => {
             key="7"
             icon={<FolderAddTwoTone twoToneColor="#4cc9f0" style={font30} />}
           >
-            <Link href={URLS.documents}>Documents</Link>
+            <Link href={URLS.documents}>Files</Link>
           </Menu.Item>
         </Menu>
       </Sider>

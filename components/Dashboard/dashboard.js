@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import Deadline from "./deadline";
 import ProjectChart from "./projectchart";
 import UsersCount from "./userscount";
+import RegUsers from "./reguser";
 
 const today_query = gql`
   query today {
@@ -114,6 +115,13 @@ const Dashboard = (props) => {
         <div className={styles.projectstats}>
           <Divider orientation="left">Projects Approaching Deadline</Divider>
           <Deadline {...props} />
+        </div>
+      </div>
+
+      <div className={styles.regusers}>
+        <div className={styles.reg}>
+          <Divider orientation="middle">Registered Users in MB and UPI</Divider>
+          <RegUsers {...props} />
         </div>
       </div>
 

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Form, InputNumber, Button, DatePicker, message } from "antd";
-import { UploadOutlined, LockOutlined } from "@ant-design/icons";
+import { Form, InputNumber, Button, DatePicker, message, Modal } from "antd";
+import { UploadOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 import { gql, GraphQLClient } from "graphql-request";
 import { BACKEND_URL } from "../../../utils/constants";
 import Cookies from "js-cookie";
 import styles from "../expenditure/expenditure.module.css";
+import { connect } from "react-redux";
+import { IoCompassOutline } from "react-icons/io5";
+import * as actionTypes from "../../../redux/actions/main";
 
 const uploadMutation = gql`
   mutation ($date: Date!, $mbIncremental: Int!, $upiIncremental: Int!) {
@@ -13,10 +16,16 @@ const uploadMutation = gql`
       mbinc: $mbIncremental
       upiinc: $upiIncremental
     ) {
-      success
+      totalusers {
+        date
+        mb
+        upi
+      }
     }
   }
 `;
+
+const { confirm } = Modal;
 
 const RegisteredUsers = (props) => {
   const [form] = Form.useForm();
@@ -31,16 +40,42 @@ const RegisteredUsers = (props) => {
       ...values,
       date: values.date.toDate().toISOString().split("T")[0],
     };
-
-    props.client
-      .request(uploadMutation, data)
-      .then((resp) => {
-        message.success("Users Count Updated Successfully");
-        form.resetFields();
-      })
-      .catch((err) => {
-        message.error("Duplicate Entry Found");
+    const mbinc = data.mbIncremental - props.regusers.mb;
+    const upiinc = data.upiIncremental - props.regusers.upi;
+    if (mbinc <= 0 || upiinc <= 0) {
+      confirm({
+        title: "Please confirm the data?",
+        icon: <ExclamationCircleOutlined />,
+        content:
+          "One or More Incremental Values are coming in negative. Do you want to proceed?",
+        onOk() {
+          props.client
+            .request(uploadMutation, data)
+            .then((resp) => {
+              message.success("Users Count Updated Successfully");
+              form.resetFields();
+              props.reg(resp.addIncrementalUser.totalusers);
+            })
+            .catch((err) => {
+              message.error("Duplicate Entry Found");
+            });
+        },
+        onCancel() {
+          return 0;
+        },
       });
+    } else {
+      props.client
+        .request(uploadMutation, data)
+        .then((resp) => {
+          message.success("Users Count Updated Successfully");
+          form.resetFields();
+          props.reg(resp.addIncrementalUser.totalusers);
+        })
+        .catch((err) => {
+          message.error("Duplicate Entry Found");
+        });
+    }
   };
 
   return (
@@ -73,14 +108,14 @@ const RegisteredUsers = (props) => {
           rules={[
             {
               required: true,
-              message: "Please Provide MB Incremental User Registration Count",
+              message: "Please Provide MB Total User Registration Count",
             },
           ]}
         >
           <InputNumber
             min={0}
             style={{ width: 200 }}
-            placeholder="MB Incremental Registered Users"
+            placeholder="Total MB Users Registered"
           />
         </Form.Item>
 
@@ -89,14 +124,14 @@ const RegisteredUsers = (props) => {
           rules={[
             {
               required: true,
-              message: "Please Provide UPI Incremental User Registration Count",
+              message: "Please Provide UPI Total User Registration Count",
             },
           ]}
         >
           <InputNumber
             min={0}
             style={{ width: 200 }}
-            placeholder="UPI Incremental Registered Users"
+            placeholder="Total UPI Users Registered"
           />
         </Form.Item>
         <Form.Item shouldUpdate>
@@ -119,4 +154,12 @@ const RegisteredUsers = (props) => {
   );
 };
 
-export default RegisteredUsers;
+const mapDispatchToProps = (dispatch) => ({
+  reg: (regusers) => dispatch(actionTypes.setRegUsers(regusers)),
+});
+
+const mapStateToProps = (state) => ({
+  regusers: state.main.regusers,
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisteredUsers);

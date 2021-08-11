@@ -4,6 +4,7 @@ const initialState = {
   loggedIn: false,
   username: null,
   name: null,
+  regusers: null,
 };
 
 const main = (state = initialState, action) => {
@@ -24,6 +25,14 @@ const main = (state = initialState, action) => {
         loggedIn: action.payload.value,
         username: action.payload.username,
         name: action.payload.name,
+      };
+      break;
+    }
+
+    case t.REG: {
+      return {
+        ...state,
+        regusers: action.payload,
       };
       break;
     }

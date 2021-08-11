@@ -4,6 +4,7 @@ import SiderDemo from "../../../components/Layout/layout";
 import SpecficProject from "../../../components/Dashboard/projects/projectdesc";
 import { request, gql } from "graphql-request";
 import { BACKEND_URL } from "../../../utils/constants";
+import Head from "next/head";
 
 const formdata_query = gql`
   query {
@@ -21,7 +22,14 @@ const formdata_query = gql`
 const Home = (props) => {
   const router = useRouter();
   const id = router.query;
-  return <SpecficProject {...props} {...id} />;
+  return (
+    <>
+      <Head>
+        <title>Project Details</title>
+      </Head>
+      <SpecficProject {...props} {...id} />
+    </>
+  );
 };
 
 export async function getServerSideProps(context) {
