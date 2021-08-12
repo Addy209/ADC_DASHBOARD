@@ -23,9 +23,14 @@ const TDChart = (props) => {
 
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(query).then((resp) => {
-        setData(resp.fifteendaytd);
-      });
+      props.client
+        .request(query)
+        .then((resp) => {
+          setData(resp.fifteendaytd);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 

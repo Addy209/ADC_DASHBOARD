@@ -33,9 +33,14 @@ const SearchFiles = (props) => {
       message.info("Type Something To Search");
       return 0;
     }
-    props.client.request(searchquery, { text: value }).then((res) => {
-      setData(res.search);
-    });
+    props.client
+      .request(searchquery, { text: value })
+      .then((res) => {
+        setData(res.search);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

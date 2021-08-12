@@ -42,9 +42,14 @@ const Dashboard = (props) => {
 
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(today_query).then((data) => {
-        setResp(data);
-      });
+      props.client
+        .request(today_query)
+        .then((data) => {
+          setResp(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 

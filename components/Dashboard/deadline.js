@@ -28,9 +28,14 @@ const OngoingProjects = (props) => {
 
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(deadlineQuery).then((res) => {
-        setCritical(res.deadlineProjects);
-      });
+      props.client
+        .request(deadlineQuery)
+        .then((res) => {
+          setCritical(res.deadlineProjects);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 

@@ -25,11 +25,16 @@ const RegUsers = (props) => {
   const [data, setData] = React.useState(null);
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(query).then((res) => {
-        console.log(res.totaluser);
-        setData(res);
-        props.reg(res.totaluser);
-      });
+      props.client
+        .request(query)
+        .then((res) => {
+          console.log(res.totaluser);
+          setData(res);
+          props.reg(res.totaluser);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
   return (

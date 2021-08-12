@@ -20,16 +20,21 @@ export const setToken = (value) => {
         authorization: `JWT ${Cookies.get("TOKEN")}`,
       },
     });
-    client.request(me_query).then((data) => {
-      dispatch({
-        type: t.SET_TOKEN,
-        payload: {
-          value: value,
-          username: data?.me?.username,
-          name: data?.me?.firstName + " " + data?.me?.lastName,
-        },
+    client
+      .request(me_query)
+      .then((data) => {
+        dispatch({
+          type: t.SET_TOKEN,
+          payload: {
+            value: value,
+            username: data?.me?.username,
+            name: data?.me?.firstName + " " + data?.me?.lastName,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   };
 };
 

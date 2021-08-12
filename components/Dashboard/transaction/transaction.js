@@ -105,19 +105,24 @@ const Transaction = (props) => {
       fromdate: values.fromdate,
       todate: values.todate,
     };
-    props.client.request(query, variables).then((data) => {
-      let arr = data.transaction.map((val, index) => {
-        const date = new Date(val.date);
-        const formattedDate = `${date.getDate()}-${
-          MONTH_NAMES[date.getMonth() + 1]
-        }-${date.getFullYear()}`;
-        return {
-          ...val,
-          date: formattedDate,
-        };
+    props.client
+      .request(query, variables)
+      .then((data) => {
+        let arr = data.transaction.map((val, index) => {
+          const date = new Date(val.date);
+          const formattedDate = `${date.getDate()}-${
+            MONTH_NAMES[date.getMonth() + 1]
+          }-${date.getFullYear()}`;
+          return {
+            ...val,
+            date: formattedDate,
+          };
+        });
+        setRespData(arr);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      setRespData(arr);
-    });
   };
 
   return (

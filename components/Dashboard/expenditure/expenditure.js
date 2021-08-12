@@ -73,9 +73,14 @@ const Expenditure = (props) => {
 
   const handleClick = () => {
     if (values.module) {
-      props.client.request(expense_query, values).then((data) => {
-        setRespData(data);
-      });
+      props.client
+        .request(expense_query, values)
+        .then((data) => {
+          setRespData(data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 

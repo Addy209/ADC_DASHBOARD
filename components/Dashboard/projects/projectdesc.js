@@ -50,10 +50,15 @@ const SpecficProject = (props) => {
 
   React.useEffect(() => {
     if (props.id) {
-      props.client.request(projectQuery, { id: props.id }).then((resp) => {
-        setValues(resp.project);
-        setDoc(resp.project.projectDocument);
-      });
+      props.client
+        .request(projectQuery, { id: props.id })
+        .then((resp) => {
+          setValues(resp.project);
+          setDoc(resp.project.projectDocument);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, [props.id]);
   const refetch = (resp) => {

@@ -51,9 +51,14 @@ const SharedFiles = (props) => {
   const [data, setData] = React.useState([]);
 
   React.useEffect(() => {
-    props.client.request(query).then((resp) => {
-      setData(resp?.sharedfiles);
-    });
+    props.client
+      .request(query)
+      .then((resp) => {
+        setData(resp?.sharedfiles);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (

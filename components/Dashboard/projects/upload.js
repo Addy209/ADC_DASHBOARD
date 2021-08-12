@@ -32,10 +32,15 @@ const DocumentUpload = (props) => {
       id: props.id,
     };
 
-    props.client.request(uploadMutation, data).then((resp) => {
-      form.resetFields();
-      props.refetch(resp.documentUpload.savedDocument);
-    });
+    props.client
+      .request(uploadMutation, data)
+      .then((resp) => {
+        form.resetFields();
+        props.refetch(resp.documentUpload.savedDocument);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

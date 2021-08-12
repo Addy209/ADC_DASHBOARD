@@ -37,9 +37,14 @@ const SearchModal = (props) => {
       message.info("Type Something To Search");
       return 0;
     }
-    props.client.request(searchquery, { text: value }).then((res) => {
-      setData(res.searchproject);
-    });
+    props.client
+      .request(searchquery, { text: value })
+      .then((res) => {
+        setData(res.searchproject);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <>

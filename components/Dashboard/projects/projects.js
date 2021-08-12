@@ -42,33 +42,38 @@ const Projects = (props) => {
   });
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(allprojectquery).then((res) => {
-        const allproject = res.allproject;
-        if (allproject) {
-          let ongoingProject = allproject.map((val, index) => {
-            if (!val.live) {
-              return val;
-            } else {
-              return null;
-            }
-          });
-          let completedprojects = allproject.map((val, index) => {
-            if (val.live) {
-              return val;
-            } else {
-              return null;
-            }
-          });
+      props.client
+        .request(allprojectquery)
+        .then((res) => {
+          const allproject = res.allproject;
+          if (allproject) {
+            let ongoingProject = allproject.map((val, index) => {
+              if (!val.live) {
+                return val;
+              } else {
+                return null;
+              }
+            });
+            let completedprojects = allproject.map((val, index) => {
+              if (val.live) {
+                return val;
+              } else {
+                return null;
+              }
+            });
 
-          ongoingProject = ongoingProject.filter((val) => val != null);
-          completedprojects = completedprojects.filter((val) => val != null);
+            ongoingProject = ongoingProject.filter((val) => val != null);
+            completedprojects = completedprojects.filter((val) => val != null);
 
-          setProjectData({
-            ongoing: ongoingProject,
-            completed: completedprojects,
-          });
-        }
-      });
+            setProjectData({
+              ongoing: ongoingProject,
+              completed: completedprojects,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 

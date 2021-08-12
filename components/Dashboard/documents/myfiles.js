@@ -80,26 +80,41 @@ const MyFiles = (props) => {
 
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(query).then((resp) => {
-        setData(resp?.myfiles);
-      });
+      props.client
+        .request(query)
+        .then((resp) => {
+          setData(resp?.myfiles);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 
   const handlePublish = (id, index) => {
-    props.client.request(publishmutation, { id: id }).then((resp) => {
-      if (resp.publish) {
-        const file = [...data];
-        file[index].private = !file[index].private;
-        setData(file);
-      }
-    });
+    props.client
+      .request(publishmutation, { id: id })
+      .then((resp) => {
+        if (resp.publish) {
+          const file = [...data];
+          file[index].private = !file[index].private;
+          setData(file);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const handleDelete = (id) => {
-    props.client.request(deletemutation, { id: id }).then((resp) => {
-      setData(resp.deletefile.files);
-    });
+    props.client
+      .request(deletemutation, { id: id })
+      .then((resp) => {
+        setData(resp.deletefile.files);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

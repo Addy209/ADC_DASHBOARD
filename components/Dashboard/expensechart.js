@@ -17,46 +17,51 @@ const ExpenseBarChart = (props) => {
 
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(query).then((resp) => {
-        const expenseobj = JSON.parse(resp.sixmonthdata);
+      props.client
+        .request(query)
+        .then((resp) => {
+          const expenseobj = JSON.parse(resp.sixmonthdata);
 
-        const lbl = expenseobj.map((val) => {
-          return `${MONTH_NAMES[val.date__month]}-${val.date__year}`;
-        });
-        const label = [...new Set(lbl)];
-        const value = [];
-        for (let i = 0; i < expenseobj.length; i++) {
-          let obj = {};
-          for (let j = 0; j < expenseobj.length; j++) {
-            if (expenseobj[i]?.date__month === expenseobj[j]?.date__month) {
-              obj["label"] = `${MONTH_NAMES[expenseobj[i]?.date__month]}-${
-                expenseobj[i]?.date__year
-              }`;
-              if (expenseobj[j]?.module === 10) {
-                obj["mb"] = expenseobj[j]?.final_payment__sum;
-              } else if (expenseobj[j]?.module === 20) {
-                obj["upi"] = expenseobj[j]?.final_payment__sum;
-              } else {
-                obj["misc"] = expenseobj[j]?.final_payment__sum;
+          const lbl = expenseobj.map((val) => {
+            return `${MONTH_NAMES[val.date__month]}-${val.date__year}`;
+          });
+          const label = [...new Set(lbl)];
+          const value = [];
+          for (let i = 0; i < expenseobj.length; i++) {
+            let obj = {};
+            for (let j = 0; j < expenseobj.length; j++) {
+              if (expenseobj[i]?.date__month === expenseobj[j]?.date__month) {
+                obj["label"] = `${MONTH_NAMES[expenseobj[i]?.date__month]}-${
+                  expenseobj[i]?.date__year
+                }`;
+                if (expenseobj[j]?.module === 10) {
+                  obj["mb"] = expenseobj[j]?.final_payment__sum;
+                } else if (expenseobj[j]?.module === 20) {
+                  obj["upi"] = expenseobj[j]?.final_payment__sum;
+                } else {
+                  obj["misc"] = expenseobj[j]?.final_payment__sum;
+                }
               }
             }
+            if (obj) {
+              value.push(obj);
+            }
           }
-          if (obj) {
-            value.push(obj);
-          }
-        }
 
-        let uniquevals = [];
-        let uniqueobj = {};
-        for (let i in value) {
-          const date = value[i].label;
-          uniqueobj[date] = value[i];
-        }
-        for (let i in uniqueobj) {
-          uniquevals.push(uniqueobj[i]);
-        }
-        setData(uniquevals);
-      });
+          let uniquevals = [];
+          let uniqueobj = {};
+          for (let i in value) {
+            const date = value[i].label;
+            uniqueobj[date] = value[i];
+          }
+          for (let i in uniqueobj) {
+            uniquevals.push(uniqueobj[i]);
+          }
+          setData(uniquevals);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 

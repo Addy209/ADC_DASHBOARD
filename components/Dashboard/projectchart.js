@@ -15,10 +15,15 @@ const ProjectChart = (props) => {
   const [counts, setCounts] = React.useState(null);
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(countQuery).then((resp) => {
-        const parsedresp = JSON.parse(resp.counts);
-        setCounts(parsedresp);
-      });
+      props.client
+        .request(countQuery)
+        .then((resp) => {
+          const parsedresp = JSON.parse(resp.counts);
+          setCounts(parsedresp);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 

@@ -19,9 +19,14 @@ const UsersCount = (props) => {
 
   React.useEffect(() => {
     if (props.loggedIn) {
-      props.client.request(query).then((resp) => {
-        setData(resp.incuserdata);
-      });
+      props.client
+        .request(query)
+        .then((resp) => {
+          setData(resp.incuserdata);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }, []);
 
