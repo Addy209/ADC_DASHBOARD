@@ -25,33 +25,21 @@ const expensecreate = gql`
     $date: Date!
     $description: String!
     $finalamt: Int!
-    $fincost: Int!
-    $finrate: Float!
-    $fintxns: Int!
     $gst: Int!
     $gst_percent: Float!
     $module: ID!
-    $nonfincost: Int!
-    $nonfinrate: Float!
-    $nonfintxns: Int!
     $penalty: Int!
     $invoice: Upload
   ) {
-    createExpense(
+    createOtherExpense(
       date: $date
+      module: $module
       description: $description
-      finTxn: $fintxns
-      finRate: $finrate
-      finCost: $fincost
-      nonfinTxn: $nonfintxns
-      nonfinRate: $nonfinrate
-      nonfinCost: $nonfincost
+      baseAmt: $baseamount
       gstPercent: $gst_percent
       gstAmt: $gst
       penalty: $penalty
-      baseAmt: $baseamount
       finalPayment: $finalamt
-      module: $module
       invoice: $invoice
     ) {
       success
@@ -59,14 +47,8 @@ const expensecreate = gql`
   }
 `;
 
-const ExpenditureForm = (props) => {
+const OtherExpenditureForm = (props) => {
   const [state, setState] = useState({
-    fintxns: "",
-    nonfintxns: "",
-    finrate: 0.0,
-    nonfinrate: 0.0,
-    fincost: 0,
-    nonfincost: 0,
     baseamount: "",
     gst_percent: 0,
     gst: "",
@@ -103,57 +85,10 @@ const ExpenditureForm = (props) => {
       val = 0;
     }
     switch (Object.keys(values)[0]) {
-      case "fintxns": {
+      case "baseamount": {
         SetTheState(values);
-        if (state.finrate) {
-          let res = Math.round(val * state.finrate);
-          SetTheState({ fincost: res });
-          res = res + state.nonfincost;
-          SetTheState({ baseamount: res });
-          if (state.gst_percent) {
-            SetGST(res);
-          }
-        }
-        break;
-      }
-      case "finrate": {
-        SetTheState(values);
-        if (state.fintxns) {
-          let res = Math.round(state.fintxns * val);
-          SetTheState({ fincost: res });
-          res = res + state.nonfincost;
-          SetTheState({ baseamount: res });
-          if (state.gst_percent) {
-            SetGST(res);
-          }
-        }
-        break;
-      }
-      case "nonfintxns": {
-        SetTheState(values);
-        if (state.nonfinrate) {
-          let res = Math.round(val * state.nonfinrate);
-          SetTheState({ nonfincost: res });
-
-          res = res + state.fincost;
-          SetTheState({ baseamount: res });
-          if (state.gst_percent) {
-            SetGST(res);
-          }
-        }
-        break;
-      }
-      case "nonfinrate": {
-        SetTheState(values);
-        if (state.nonfintxns) {
-          let res = Math.round(state.nonfintxns * val);
-          SetTheState({ nonfincost: res });
-
-          res = res + state.fincost;
-          SetTheState({ baseamount: res });
-          if (state.gst_percent) {
-            SetGST(res);
-          }
+        if (state.gst_percent) {
+          SetGST(val);
         }
         break;
       }
@@ -187,12 +122,12 @@ const ExpenditureForm = (props) => {
     props.client
       .request(expensecreate, data)
       .then((data) => {
-        if (data.createExpense.success) {
+        if (data.createOtherExpense.success) {
           message.success("Expense Saved Successfully");
         }
       })
       .catch((err) => {
-        message.error(err.message.substr(0, err.message.indexOf("|")));
+        message.error("Expense was not saved");
       });
   };
 
@@ -208,10 +143,7 @@ const ExpenditureForm = (props) => {
         initialValues={{
           date: "",
           module: "",
-          fintxns: "",
-          nonfintxns: "",
-          finrate: "",
-          nonfinrate: "",
+          baseamount: "",
           gst_percent: "",
           penalty: "",
           description: "",
@@ -226,7 +158,12 @@ const ExpenditureForm = (props) => {
             <Form.Item
               label="Date"
               name="date"
-              rules={[{ required: true, message: "Please input Date!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please input Date!",
+                },
+              ]}
             >
               <DatePicker
                 picker="date"
@@ -236,42 +173,16 @@ const ExpenditureForm = (props) => {
             </Form.Item>
 
             <Form.Item
-              label="Financial Txns"
-              name="fintxns"
+              label="Base Amount"
+              name="baseamount"
               rules={[
                 {
                   required: true,
-                  message: "Please input Financial Transactions!",
+                  message: "Please input Base Amount!",
                 },
               ]}
             >
               <InputNumber className={styles.setwidth} />
-            </Form.Item>
-            <Form.Item
-              label="Rate"
-              name="finrate"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input Financial Transaction Rate!",
-                },
-              ]}
-            >
-              <InputNumber className={styles.setwidth} min={0} step={0.01} />
-            </Form.Item>
-            <Form.Item label="Financial Txns Cost">
-              <InputNumber
-                className={styles.setwidth}
-                value={state.fincost}
-                disabled
-              />
-            </Form.Item>
-            <Form.Item label="Base Amount">
-              <InputNumber
-                className={styles.setwidth}
-                value={state.baseamount}
-                disabled
-              />
             </Form.Item>
             <Form.Item label="GST Amount">
               <InputNumber
@@ -298,7 +209,12 @@ const ExpenditureForm = (props) => {
             <Form.Item
               label="Module"
               name="module"
-              rules={[{ required: true, message: "Please Select Module!" }]}
+              rules={[
+                {
+                  required: true,
+                  message: "Please Select Module!",
+                },
+              ]}
             >
               <Select className={styles.setwidth}>
                 <Select.Option value="00">---Select Module---</Select.Option>
@@ -309,37 +225,6 @@ const ExpenditureForm = (props) => {
                 ))}
               </Select>
             </Form.Item>
-            <Form.Item
-              label="Non-Financial Txns"
-              name="nonfintxns"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input Non Financial Transactions!",
-                },
-              ]}
-            >
-              <InputNumber className={styles.setwidth} />
-            </Form.Item>
-            <Form.Item
-              label="Rate"
-              name="nonfinrate"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input  Non Financial Transaction Rate!",
-                },
-              ]}
-            >
-              <InputNumber className={styles.setwidth} min={0} step={0.01} />
-            </Form.Item>
-            <Form.Item label="Non-Financial Txns Cost">
-              <InputNumber
-                className={styles.setwidth}
-                disabled
-                value={state.nonfincost}
-              />
-            </Form.Item>
 
             <Form.Item
               label="GST Percent"
@@ -347,7 +232,7 @@ const ExpenditureForm = (props) => {
               rules={[
                 {
                   required: true,
-                  message: "Please input GST %, Input 0 if None!",
+                  message: "Please input GST%, Input 0 if None!",
                 },
               ]}
             >
@@ -403,4 +288,4 @@ const ExpenditureForm = (props) => {
   );
 };
 
-export default ExpenditureForm;
+export default OtherExpenditureForm;

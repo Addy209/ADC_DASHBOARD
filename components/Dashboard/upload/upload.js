@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Upload, Switch, message, Button } from "antd";
+import { Divider, Upload, Switch, message, Button, Tabs } from "antd";
 import { FileAddOutlined, UploadOutlined } from "@ant-design/icons";
 import styles from "../expenditure/expenditure.module.css";
 import ExpenditureForm from "./uploadexpenditure";
@@ -7,6 +7,7 @@ import { BACKEND_URL } from "../../../utils/constants";
 import { GraphQLClient, gql } from "graphql-request";
 import Cookies from "js-cookie";
 import RegisteredUsers from "./registeredusers";
+import OtherExpenditureForm from "./uploadotherexpenditure";
 
 const upload_query = gql`
   mutation addfile($file: Upload!) {
@@ -15,6 +16,8 @@ const upload_query = gql`
     }
   }
 `;
+
+const { TabPane } = Tabs;
 
 const { Dragger } = Upload;
 
@@ -42,6 +45,8 @@ const UploadData = (props) => {
           return {
             ...state,
             expense: value,
+            daily: !value,
+            registeredusers: !value,
           };
         });
         break;
@@ -85,7 +90,8 @@ const UploadData = (props) => {
       <Divider orientation="left">
         Daily Transaction Sheet Upload &nbsp;{" "}
         <Switch
-          defaultChecked={switchval.daily}
+          defaultChecked
+          checked={switchval.daily}
           checkedChildren="On"
           unCheckedChildren="Off"
           onChange={(value) => handleSwitchChange(value, "d")}
@@ -124,7 +130,8 @@ const UploadData = (props) => {
         <Switch
           checkedChildren="On"
           unCheckedChildren="Off"
-          defaultChecked={switchval.registeredusers}
+          defaultChecked
+          checked={switchval.registeredusers}
           onChange={(value) => handleSwitchChange(value, "r")}
         />
       </Divider>
@@ -135,11 +142,21 @@ const UploadData = (props) => {
         <Switch
           checkedChildren="On"
           unCheckedChildren="Off"
-          defaultChecked={switchval.expense}
+          checked={switchval.expense}
           onChange={(value) => handleSwitchChange(value, "e")}
         />
       </Divider>
-      {switchval.expense ? <ExpenditureForm {...props} /> : null}
+
+      {switchval.expense ? (
+        <Tabs defaultActiveKey="1" type="card" size="large" centered>
+          <TabPane tab="Non-Transactional Expense" key="1">
+            <OtherExpenditureForm {...props} />
+          </TabPane>
+          <TabPane tab="Transactional Expense" key="2">
+            <ExpenditureForm {...props} />
+          </TabPane>
+        </Tabs>
+      ) : null}
     </div>
   );
 };
