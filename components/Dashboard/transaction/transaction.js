@@ -1,5 +1,13 @@
 import React from "react";
-import { Select, Divider, DatePicker, Space, Button, Typography } from "antd";
+import {
+  Select,
+  Divider,
+  DatePicker,
+  Space,
+  Button,
+  Typography,
+  message,
+} from "antd";
 import styles from "../expenditure/expenditure.module.css";
 import DataTable from "./datatable";
 import Chart from "./tdchart";
@@ -121,7 +129,9 @@ const Transaction = (props) => {
         setRespData(arr);
       })
       .catch((err) => {
-        console.log(err);
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 

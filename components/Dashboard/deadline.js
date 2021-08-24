@@ -1,4 +1,4 @@
-import { List, Avatar } from "antd";
+import { List, Avatar, message } from "antd";
 import { gql, GraphQLClient } from "graphql-request";
 import Cookies from "js-cookie";
 import React from "react";
@@ -34,7 +34,9 @@ const OngoingProjects = (props) => {
           setCritical(res.deadlineProjects);
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   }, []);

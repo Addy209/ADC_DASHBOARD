@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./projects.module.css";
-import { Button, Divider } from "antd";
+import { Button, Divider, message } from "antd";
 import CompletedProjects from "./completedprojects";
 import OngoingProjects from "./ongoingprojects";
 import CreateProject from "./createproject";
@@ -72,7 +72,9 @@ const Projects = (props) => {
           }
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   }, []);

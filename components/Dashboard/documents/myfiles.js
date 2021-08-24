@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Avatar, Tooltip } from "antd";
+import { Card, message, Tooltip } from "antd";
 import {
   FileExcelTwoTone,
   FilePdfTwoTone,
@@ -86,7 +86,9 @@ const MyFiles = (props) => {
           setData(resp?.myfiles);
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   }, []);
@@ -102,7 +104,9 @@ const MyFiles = (props) => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 
@@ -113,7 +117,9 @@ const MyFiles = (props) => {
         setData(resp.deletefile.files);
       })
       .catch((err) => {
-        console.log(err);
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 

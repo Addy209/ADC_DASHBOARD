@@ -1,4 +1,4 @@
-import { Modal, Button, Input } from "antd";
+import { Modal, Button, Input, message } from "antd";
 import { gql } from "graphql-request";
 import React from "react";
 import { FcSearch } from "react-icons/fc";
@@ -43,7 +43,9 @@ const SearchModal = (props) => {
         setData(res.searchproject);
       })
       .catch((err) => {
-        console.log(err);
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
   return (

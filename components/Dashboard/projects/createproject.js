@@ -141,7 +141,9 @@ const CreateProject = (props) => {
           props.refetch(res.updateProject);
         })
         .catch((err) => {
-          message.error("Something Went Wrong");
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     } else {
       props.client
@@ -153,7 +155,9 @@ const CreateProject = (props) => {
           }, 2000);
         })
         .catch((err) => {
-          message.error("Something Went Wrong");
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Avatar, Tooltip } from "antd";
+import { Card, message, Tooltip } from "antd";
 import {
   FileExcelTwoTone,
   FilePdfTwoTone,
@@ -57,7 +57,9 @@ const SharedFiles = (props) => {
         setData(resp?.sharedfiles);
       })
       .catch((err) => {
-        console.log(err);
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   }, []);
 

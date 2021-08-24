@@ -127,7 +127,9 @@ const OtherExpenditureForm = (props) => {
         }
       })
       .catch((err) => {
-        message.error("Expense was not saved");
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 

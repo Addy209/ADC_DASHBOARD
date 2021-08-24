@@ -1,5 +1,13 @@
 import React from "react";
-import { Select, Divider, DatePicker, Space, Button, Typography } from "antd";
+import {
+  Select,
+  Divider,
+  DatePicker,
+  Space,
+  Button,
+  Typography,
+  message,
+} from "antd";
 import styles from "./expenditure.module.css";
 import Table from "./datatable";
 import request, { GraphQLClient, gql } from "graphql-request";
@@ -79,7 +87,9 @@ const Expenditure = (props) => {
           setRespData(data);
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   };

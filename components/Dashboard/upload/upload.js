@@ -72,14 +72,12 @@ const UploadData = (props) => {
         file: info.file,
       })
       .then((data) => {
-        message.success(
-          `${info.file.name} file data captured successfully. Have you updated users count? `
-        );
+        message.success("Record Saved Successfully!");
       })
       .catch((err) => {
-        message.error(
-          "Duplicate Entry Found!, If correction is needed, Please do it from Admin Panel"
-        );
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./projects.module.css";
-import { Button, Divider } from "antd";
+import { Button, Divider, message } from "antd";
 import CompletedProjects from "./completedprojects";
 import OngoingProjects from "./ongoingprojects";
 import ProjectDetails from "./projectdetails";
@@ -57,7 +57,9 @@ const SpecficProject = (props) => {
           setDoc(resp.project.projectDocument);
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   }, [props.id]);

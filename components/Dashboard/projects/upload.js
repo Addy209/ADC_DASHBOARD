@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Input, Button, Upload } from "antd";
+import { Form, Input, Button, Upload, message } from "antd";
 import { UploadOutlined, LockOutlined } from "@ant-design/icons";
 import { gql, GraphQLClient } from "graphql-request";
 import { BACKEND_URL } from "../../../utils/constants";
@@ -39,7 +39,9 @@ const DocumentUpload = (props) => {
         props.refetch(resp.documentUpload.savedDocument);
       })
       .catch((err) => {
-        console.log(err);
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 

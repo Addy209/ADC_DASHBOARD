@@ -3,6 +3,7 @@ import React from "react";
 import { GraphQLClient, gql } from "graphql-request";
 import { BACKEND_URL } from "../../utils/constants";
 import Cookies from "js-cookie";
+import { message } from "antd";
 
 const query = gql`
   query {
@@ -29,7 +30,9 @@ const TDChart = (props) => {
           setData(resp.fifteendaytd);
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   }, []);

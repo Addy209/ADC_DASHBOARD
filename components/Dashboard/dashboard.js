@@ -1,5 +1,5 @@
 import React from "react";
-import { Layout, Menu, Divider } from "antd";
+import { Layout, Menu, Divider, message } from "antd";
 import styles from "./dashboard.module.css";
 import Count from "./counts";
 import TDChart from "./tdchart";
@@ -48,7 +48,9 @@ const Dashboard = (props) => {
           setResp(data);
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   }, []);

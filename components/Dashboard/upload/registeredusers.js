@@ -57,7 +57,9 @@ const RegisteredUsers = (props) => {
               props.reg(resp.addIncrementalUser.totalusers);
             })
             .catch((err) => {
-              message.error("Duplicate Entry Found");
+              err.message.indexOf("|")
+                ? message.error(err.message.substr(0, err.message.indexOf("|")))
+                : console.log(err);
             });
         },
         onCancel() {
@@ -73,7 +75,9 @@ const RegisteredUsers = (props) => {
           props.reg(resp.addIncrementalUser.totalusers);
         })
         .catch((err) => {
-          message.error("Duplicate Entry Found");
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   };

@@ -52,11 +52,9 @@ const Document = (props) => {
         setUpload(resp?.savefile?.files);
       })
       .catch((err) => {
-        if (err.message.includes("42")) {
-          message.error("Max Allowed Upload File Size is 10MB");
-        } else if (err.message.includes("02")) {
-          message.error("You Are Not Authorized to Make changes to this file");
-        }
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 

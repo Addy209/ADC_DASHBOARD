@@ -4,6 +4,7 @@ import styles from "./dashboard.module.css";
 import { GraphQLClient, gql } from "graphql-request";
 import { BACKEND_URL } from "../../utils/constants";
 import Cookies from "js-cookie";
+import { message } from "antd";
 
 const countQuery = gql`
   query counts {
@@ -22,7 +23,9 @@ const ProjectChart = (props) => {
           setCounts(parsedresp);
         })
         .catch((err) => {
-          console.log(err);
+          err.message.indexOf("|")
+            ? message.error(err.message.substr(0, err.message.indexOf("|")))
+            : console.log(err);
         });
     }
   }, []);

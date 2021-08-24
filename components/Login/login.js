@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./login.module.css";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
 import Image from "next/image";
 import { Typography } from "antd";
 import { RiLoginBoxFill } from "react-icons/ri";
@@ -36,7 +36,11 @@ const Login = (props) => {
         props.login(true);
       })
       .catch((err) => {
-        alert("Wrong Username or Password");
+        if (err.message.includes("Network")) {
+          message.error(
+            "Can't Connect to the Server. Check if Backend is running."
+          );
+        } else message.error("Wrong Username or Password");
       });
   };
 

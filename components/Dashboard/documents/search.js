@@ -39,7 +39,9 @@ const SearchFiles = (props) => {
         setData(res.search);
       })
       .catch((err) => {
-        console.log(err);
+        err.message.indexOf("|")
+          ? message.error(err.message.substr(0, err.message.indexOf("|")))
+          : console.log(err);
       });
   };
 
